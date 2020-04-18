@@ -14,13 +14,11 @@
                 </div>
             </q-card-section>
 
-            <q-card-section style="z-index:-1">
+            <q-card-section>
 
                 <q-form ref="form" class="q-px-sm q-pt-xl" @submit="letsParty">
 
-                    <transition-expand>
                         <p class="text-center text-body2" v-if="type === 'forgot-password'">Inserisci la tua e-mail. Ti invieremo un link per reimpostare la password</p>
-                    </transition-expand>
 
                     <q-input square bottom-slots :rules="rules.email" v-model="form.email" type="email" label="Email" autocomplete="email">
                         <template v-slot:before>
@@ -28,21 +26,17 @@
                         </template>
                     </q-input>
 
-                    <transition-expand>
                         <q-input v-if="type === 'sign-up'" square bottom-slots :rules="rules.username" v-model="form.username" type="text" label="Username">
                             <template v-slot:before>
                                 <q-icon name="mdi-account" />
                             </template>
                         </q-input>
-                    </transition-expand>
 
-                    <transition-expand>
                         <q-input v-if="type === 'sign-in' || type === 'sign-up'" square bottom-slots :rules="rules.password" v-model="form.password" type="password" label="Password" autocomplete="new-password">
                             <template v-slot:before>
                                 <q-icon name="lock" />
                             </template>
                         </q-input>
-                    </transition-expand>
 
                     <!--Button-->
                     <q-card-actions class="q-px-lg q-mt-md">
@@ -71,10 +65,8 @@
 </template>
 
 <script>
-import TransitionExpand from 'components/TransitionExpand'
 export default {
     components: {
-        TransitionExpand
     },
     data() {
         return {

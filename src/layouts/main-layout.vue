@@ -3,9 +3,9 @@
     <q-header elevated reveal>
       <q-toolbar>
         
-        <q-toolbar-title class="absolute-center pacifico-font text-lowercase text-h4">
+      <div class="absolute-center pacifico-font items-center text-lowercase text-h4 q-pb-sm">
           Aroma
-        </q-toolbar-title>
+        </div>
 
          </q-toolbar>
     </q-header>
@@ -14,7 +14,7 @@
       <router-view />
     </q-page-container>
 
-  <!--Footer-->
+    <!--Footer-->
     <q-footer
       elevated
     >
@@ -26,7 +26,7 @@
         >
           <q-route-tab
             icon="mdi-trending-up"
-            to="/app/orders"
+            to="/app/stats"
           />
           <q-route-tab
             icon="mdi-compass"
@@ -34,7 +34,7 @@
           />
           <q-route-tab
             icon="mdi-account"
-            to="/app/map"
+            to="/app/profile"
           />
         </q-tabs>
 

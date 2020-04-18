@@ -4,7 +4,7 @@
 
         <q-card class="shadow-24 col-12 col-sm-auto">
             <q-card-section class="bg-primary text-center">
-                <h4 class="text-h3 text-white q-my-md pacifico-font">Aromas</h4>
+                <h4 class="text-h3 text-white q-my-md pacifico-font text-lowercase">Aroma</h4>
                 <div v-if="type === 'sign-in'" class="absolute-bottom-right q-pr-md" style="transform: translateY(50%); z-index:100">
                     <q-btn @click="type = 'sign-up'" fab class="shadow-4" icon="mdi-account-plus" color="accent">
                         <q-tooltip content-class="bg-accent" content-style="font-size: 16px">
@@ -138,44 +138,37 @@ export default {
         signIn() {
             if (this.$refs.form.validate()) {
                 this.busy = true
-                let credentials = {
-                    email: this.form.email,
-                    password: this.form.password
-                }
+                let email = this.form.email;
+                let password = this.form.password;
 
-                this.$store.dispatch('auth/signIn', credentials)
-                    .then(user => {
-
+                this.$signIn(email, password)
+                .then(user => {
                         this.busy = false
+                })
+                .catch(error => {
+                    this.$q.notify({
+                        color: 'negative',
+                        icon: 'announcement',
+                        message: error.message
                     })
-                    .catch(error => {
-                        this.$q.notify({
-                            icon: 'announcement',
-                            message: error.message
-                        })
-                        console.error(`Not signed in: ${error.message}`)
-
-                        this.busy = false
-                    })
+                    console.error(`Not signed in: ${error.message}`)
+                    this.busy = false
+                })
             }
         },
         signUp() {
             if (this.$refs.form.validate()) {
                 this.busy = true
-                let credentials = {
-                    email: this.form.email,
-                    password: this.form.password,
-                    username: this.form.username
-                }
+                let email = this.form.email;
+                let password = this.form.password;
 
-                this.$store.dispatch('auth/signUp', credentials)
+                this.$signUp(email, password)
                     .then(user => {
-                        // console.log('da page: ', this.$router)
-                        // this.$router.replace({ name: 'shop' }).catch(() => { })
                         this.busy = false
                     })
                     .catch(error => {
                         this.$q.notify({
+                            color: 'negative',
                             icon: 'announcement',
                             message: error.message
                         })
@@ -192,8 +185,8 @@ export default {
                     email: this.form.email
                 }
 
-                this.$store.dispatch('auth/recoveryPassword', credentials)
-                    .then(user => {
+                this.$recoveryPassword
+                    .then(() => {
                         this.$q.notify('E\' stata inviata un e-mail all\'indirizzo indicato, con la quale è possibile reimpostare la password.')
 
                         this.busy = false
@@ -202,6 +195,7 @@ export default {
                     })
                     .catch(error => {
                         this.$q.notify({
+                            color: 'negative',
                             icon: 'announcement',
                             message: error.message
                         })

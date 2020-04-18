@@ -6,7 +6,7 @@ import RestoringLayout from 'layouts/restoring-layout'
 import Profile from 'pages/app/profile'
 import Home from 'pages/app/home'
 
-export default [{ // Auth Routes
+export default [{
     path: '/auth',
     redirect: 'auth/challenge',
     component: () => import('layouts/auth-layout'),
@@ -18,32 +18,32 @@ export default [{ // Auth Routes
   },
 
   {
-    // Restoring
     path: '/',
+    name: 'restoring', 
     component: RestoringLayout
   },
 
-  { // Main Routes
+  {
     path: '/app',
     component: MainLayout,
     redirect: '/app/home',
     meta: {
-      authRequired: true
+      requiresAuth: true
     },
     children: [{
       path: 'profile',
       name: 'profile',
       component: Profile,
       meta: {
-        authRequired: true
+        requiresAuth: true
       }
     }, {
       path: 'home',
       name: 'home',
       component: Home,
       meta: {
-        authRequired: true
-      }
+        requiresAuth: true
+      }, 
     }]
   },
 

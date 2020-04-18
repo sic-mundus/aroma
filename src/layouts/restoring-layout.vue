@@ -41,7 +41,7 @@ export default {
   methods: {
     async redirect() {
 
-      let unsubscribe = this.$firebase.auth().onAuthStateChanged(user => {
+      let unsubscribe = this.$fb.auth().onAuthStateChanged(user => {
           let isAuthenticated = user !== null;
 
           console.log('mounted restoring: authenticated', isAuthenticated)

@@ -5254,7 +5254,7 @@ export default {
       // Last leader
       let lead = leads.slice(-1)[0] || {}
 
-      let PAGE_SIZE = 3;
+      let PAGE_SIZE = 4;
       let from = (page - 1) * PAGE_SIZE;
       let to = from + PAGE_SIZE
 

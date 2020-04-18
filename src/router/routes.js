@@ -1,10 +1,8 @@
 // Layouts
 import MainLayout from 'layouts/main-layout'
-import AuthLayout from 'layouts/auth-layout'
 import RestoringLayout from 'layouts/restoring-layout'
 
 // Pages
-import Challenge from 'pages/auth/challenge'
 import Profile from 'pages/app/profile'
 import Home from 'pages/app/home'
 

@@ -161,8 +161,9 @@ export default {
                 this.busy = true
                 let email = this.form.email;
                 let password = this.form.password;
+                let username = this.form.username;
 
-                this.$signUp(email, password)
+                this.$signUp(email, password, username)
                     .then(user => {
                         this.busy = false
                     })

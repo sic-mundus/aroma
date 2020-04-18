@@ -37,13 +37,14 @@ export default ({
     })
   }
 
-  Vue.prototype.$signUp = (email, password) => {
+  Vue.prototype.$signUp = (email, password, username) => {
     return new Promise((resolve, reject) => {
       firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((user) => {
 
-           // Updateing displayName
-           user.user.updateProfile({
+          // Updating displayName
+          console.log('Updating displayName');
+          user.user.updateProfile({
             displayName: username
           }).then(() => {
             console.log('displayName updated. Sending verify email')

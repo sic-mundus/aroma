@@ -3,7 +3,7 @@
     <!--Timeline-->
     <q-timeline color="secondary">
       <q-timeline-entry heading>
-        Your Story.
+        Your Storygit.
       </q-timeline-entry>
 
       <q-timeline-entry>
@@ -21,7 +21,7 @@
           >Explore</q-btn> -->
           <q-btn
             color="primary"
-            @click="$router.push({ name: 'wizard'})"
+            @click="$router.push({ name: 'express'})"
           >Let's do it</q-btn>
         </div>
       </q-timeline-entry>

@@ -6,7 +6,7 @@
 
     <!--Dialog-->
     <q-dialog v-model="dialog" >
-        <insights @insights-selected="dialog = false; completed()"></insights>
+        <wizard @insights-selected="dialog = false; completed()"></wizard>
     </q-dialog>
 
 </q-page>
@@ -14,12 +14,12 @@
 
 <script>
 import Explore from '../../components/Explore'
-import Insights from '../../components/insights'
+import Wizard from '../../components/wizard'
 
 export default {
     components: {
         Explore,
-        Insights
+        Wizard
     },
     data() {
         return {

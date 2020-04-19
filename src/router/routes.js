@@ -46,7 +46,7 @@ export default [{
         requiresAuth: true
       }, 
     }, {
-      path: 'wizard',
+      path: 'express',
       name: 'wizard',
       component: Wizard,
       meta: {

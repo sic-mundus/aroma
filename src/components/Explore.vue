@@ -53,10 +53,10 @@
             </div>
 
             <!--Info-->
-            <q-card-section>
+            <q-card-section class="q-px-sm">
               <!--Name & Hex-->
               <div class="text-h6">{{ hue.name }}</div>
-              <div class="text-subtitle2" style="opacity:.8">{{ hue.hex }}</div>
+              <div class="text-subtitle2" v-if="false" style="opacity:.8">{{ hue.hex }}</div>
 
               <!--Compass-->
               <q-btn
@@ -263,7 +263,7 @@ export default {
         page: page
       }
 
-      this.$store.dispatch('hues/filter', payload).then(d => {
+      this.$store.dispatch('data/getHues', payload).then(d => {
 
         if (this.exploreIndex === -1) {
           // Append

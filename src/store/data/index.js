@@ -5240,9 +5240,7 @@ export default {
   },
 
   actions: {
-    filter({
-      state
-    }, payload) {
+    getHues({ state }, payload) {
 
       let {
         leads,

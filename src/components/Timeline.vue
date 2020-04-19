@@ -3,7 +3,7 @@
     <!--Timeline-->
     <q-timeline color="secondary">
       <q-timeline-entry heading>
-        Your Moods.
+        Your Story.
       </q-timeline-entry>
 
       <q-timeline-entry>

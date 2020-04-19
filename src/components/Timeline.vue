@@ -15,10 +15,14 @@
         </template>
 
         <div>
-          <q-btn
+          <!-- <q-btn
             color="primary"
             @click="$emit('on-explore')"
-          >Explore</q-btn>
+          >Explore</q-btn> -->
+          <q-btn
+            color="primary"
+            @click="$router.push({ name: 'wizard'})"
+          >Let's do it</q-btn>
         </div>
       </q-timeline-entry>
 

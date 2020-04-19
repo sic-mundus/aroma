@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import auth from './auth'
 import hues from './hues'
+import wizard from './wizard'
 
 Vue.use(Vuex)
 
@@ -19,7 +20,8 @@ export default function ( /* { ssrContext } */ ) {
   const Store = new Vuex.Store({
     modules: {
       auth,
-      hues
+      hues,
+      wizard
     },
 
     // enable strict mode (adds overhead!)

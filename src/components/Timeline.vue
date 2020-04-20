@@ -21,20 +21,20 @@
               </template>
 
               <div>
-                  <q-btn color="primary" @click="$router.push({ name: 'express'})">Let's do it</q-btn>
+                  <div class="text-body2">Looks like you haven't choose a color today</div>
+                  <div class="text-body2">Ready to pick one?</div>
+                  <q-btn color="primary" 
+                  class="q-mt-md"
+                  @click="$router.push({ name: 'express'})">Let's do it</q-btn>
               </div>
             </q-timeline-entry>
 
-            <!--Mese-->
-            <q-timeline-entry heading>
-                November, 2017
-            </q-timeline-entry>
-
-            <event
-            v-for="event in events"
-            :key="event.id"
-            :heading="'cane'"
-            :event="event"></event>
+            <component
+            v-for="(event, idx) in events"
+            :key="idx"
+            :is="(event.isGroup ? 'Group' : 'Event')"
+            :group="event"
+            :event="event"></component>
 
         </q-timeline>
 
@@ -52,16 +52,19 @@
 import {
     mapGetters
 } from 'vuex'
-import Event from './Event'
+import Event from './timeline/Event'
+import Group from './timeline/Group'
 import utils from '../utils'
 export default {
     components: {
-      Event
+      Event,
+      Group
     },
     data() {
         return {
             lastVisible: null,
-            events: []
+            lastGroup: false,
+            events: [],
         }
     },
     computed: {
@@ -88,9 +91,8 @@ export default {
     methods: {
         onLoad(page, done) {
           
-          var myDone = done;
           console.log('#### PAGE: [' + page + '] #####')
-          
+                  
           this.$db
               .collection('events')
               .where('userId', '==', this.user.uid)
@@ -104,12 +106,26 @@ export default {
                   documentSnapshots.forEach((doc) => {
                       const event = doc.data();
                       event.id = doc.id;
+
+                      // Insert group?
+                      let group = this.$utils.getTimelineGroup(event.instant)
+                      if (group != this.lastGroup) {
+                          console.log('pusing new group')
+                          this.events.push({
+                              isGroup: true,
+                              groupName: this.$utils.getTimelineHumanGroupName(event.instant)
+                          })
+
+                          this.lastGroup = group;
+                      }
+
                       this.events.push(event);
+
                       batch.push(event.id)
                   });
 
+                  // Extact last visible to paginate the next request
                   this.lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
-                  console.log("last", this.lastVisible);
 
                   let stop = (batch.length === 0);
 

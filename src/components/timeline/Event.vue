@@ -1,13 +1,17 @@
 <template>
     <q-timeline-entry :color="'aroma-' + color.id">
+        
+        <!--Titolo-->
         <template v-slot:title>
             <div class="row">
                 <div class="circle q-mr-md" :style="{'background-color': color.hex }" v-if="false"></div>
                 {{ color.name }}
             </div>
         </template>
+
+        <!--Data-->
         <template v-slot:subtitle>
-            {{ $utils.formatTimestampFull(event.instant) }}
+            {{ humanDate }}
         </template>
 
         <!--Categorie-->
@@ -30,7 +34,7 @@
 
         <!--Confession-->
         <div class="q-pl-sm">
-            <div v-if="event.confession" class="text-body-2">
+            <div v-if="event.confession" class="text-body2">
                 {{ event.confession }}
             </div>
         </div>
@@ -44,10 +48,6 @@ export default {
         event: {
             type: Object,
             required: true
-        },
-        heading: {
-            type: String,
-            required: false
         }
     },
     data() {
@@ -63,6 +63,10 @@ export default {
             getColorById: 'data/getColorById',
             getCatsByIds: 'data/getCatsByIds'
         }),
+
+        humanDate() {
+            return this.$utils.formatTimestampFull(this.event.instant);
+        },
 
         color() {
             return this.getColorById(this.event.colId)

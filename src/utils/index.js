@@ -12,6 +12,14 @@ export default {
 
   formatTimestampFull(t) {
     return moment(t.toDate()).format('ddd, d MMM YYYY')
+  },
+
+  getTimelineGroup(t) {
+    return moment(t.toDate()).format('ddYYYY')
+  },
+
+  getTimelineHumanGroupName(t) {
+    return moment(t.toDate()).format('MMMM, YYYY')
   }
 
 }

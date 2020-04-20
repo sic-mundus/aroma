@@ -110,7 +110,6 @@ export default {
                       // Insert group?
                       let group = this.$utils.getTimelineGroup(event.instant)
                       if (group != this.lastGroup) {
-                          console.log('pusing new group')
                           this.events.push({
                               isGroup: true,
                               groupName: this.$utils.getTimelineHumanGroupName(event.instant)

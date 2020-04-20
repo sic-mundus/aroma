@@ -28,7 +28,7 @@
                             <q-btn v-if="step > 1" flat @click="$refs.stepper.previous()" label="Back" class="q-mr-sm" color="primary"/>
 
                             <!--Done-->
-                            <q-btn @click="save()" v-if="step == 3" label="Save" color="primary"/>
+                            <q-btn @click="save()" v-if="step == 3" :label="endButtonText" color="primary"/>
 
                             <!--Next-->
                             <q-btn @click="$refs.stepper.next()" v-else label="Next" color="primary"/>
@@ -66,6 +66,11 @@ export default {
             mainColor: 'wizard/mainColor',
             contrastingColor: 'wizard/constrastingColor'
         }),
+
+        endButtonText() {
+            let confession = this.$store.getters['wizard/confession'];
+            return !confession ? 'Nope, actually I\'m okay' : 'Save'
+        }
     },
     methods: {
         save() {

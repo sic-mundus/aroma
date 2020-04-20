@@ -2,9 +2,9 @@
   <div>
     <!--Motivation-->
     <div
-      class="motivation-header"
+      class="motivation-header items-center q-pa-lg q-mt-xl"
     >
-      <div class="q-ma-xl column justify-center items-center" style="margin-top:80px">
+      <div class="column justify-center items-center">
         <div class="text-h3 text-center text-primary text-bold">What color do you feel like today?</div>
         <div class="text-h5 text-center text-primary q-mt-sm">don't overthink it.<br>just scroll down and select whaterver color suits you right now</div>
 
@@ -18,13 +18,13 @@
             dense
           />
         </div>
-      </div>
+    </div>
 
      
 
     <q-infinite-scroll
       @load="onLoad"
-      :offset="50"
+      :offset="150"
       ref="infinite_scroll"
     >
 
@@ -230,7 +230,7 @@ export default {
 
     contrasColorOf(hue) {
       return hue => {
-        return utils.getContrastingColor(hue)
+        return this.$utils.getContrastingColor(hue)
       }
     },
 
@@ -407,6 +407,7 @@ export default {
   min-height: 50vh;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .my-picker {

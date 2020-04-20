@@ -1,42 +1,58 @@
 <template>
     <div class="column items-center q-gutter-md">
 
-        <div class="col-auto circle shadow-3" :style="{'background-color': mainColor}">
+        <div class="col-auto circle shadow-3 q-mx-none" :style="{'background-color': mainColor}">
         </div>
 
         <!--Info-->
-        <div class="col-auto items-center">
+        <div class="col-auto items-center q-mx-none">
             <div class="text-h6 text-center">{{ fav.name }}</div>
             <div class="text-subtitle text-center">{{ fav.hex }}</div>
         </div>
 
-        <!--History-->
-        <div v-if="anyEvent">
-            <p>You felt the same way before, remember?</p>
-             <q-list>
+        <!--Loading-->
+        <q-circular-progress
+        v-if="busy"
+        indeterminate=""
+        class="col-auto  items-center text-center q-ma-lg"
+        size="50px"
+        color="primary"
+        ></q-circular-progress>
 
-                <div v-for="(ev , idx) in events" :key="idx">
-                <q-item>
-                    <q-item-section>
-                    <q-item-label>Single line item</q-item-label>
-                    <q-item-label caption lines="2">Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
-                    </q-item-section>
+        <div v-else>
+            <!--History-->
+            <div v-if="anyEvent">
+                <p class="text-center text-subtitle1">You felt the same way before, remember?</p>
+                <q-list>
 
-                    <q-item-section side top>
-                    <q-item-label caption>5 min ago</q-item-label>
-                    <q-icon name="star" color="yellow" />
-                    </q-item-section>
-                </q-item>
+                    <div v-for="(ev , idx) in events" :key="idx">
+                    <q-item>
+                        <q-item-section style="min-width:400px !important">
+                            <q-item-label>{{ $utils.formatTimestampFull(ev.instant) }}</q-item-label>
+                            <q-item-label caption lines="2" v-if="ev.confession">{{ ev.confession }}.</q-item-label>
+                        </q-item-section>
 
-                <q-separator spaced inset />
-                </div>
+                        <q-item-section side top class="absolute-top-right">
+                            <div class="row q-gutter-xs">
+                                <q-icon v-for="cat in cats(ev)" 
+                                :key="cat.id" 
+                                :name="cat.icon"
+                                :size="'sm'"
+                                color="#AAA" />
+                            </div>
+                        </q-item-section>
+                    </q-item>
 
-                </q-list>
-        </div>
+                    <q-separator spaced inset />
+                    </div>
 
-        <!--Newbie-->
-        <div class="col-auto items-center text-center" v-else>
-            <p>You never felt this way before. It's okay, it's important to experience new colors</p>
+                    </q-list>
+            </div>
+
+            <!--Newbie-->
+            <div class="col-auto items-center text-center" v-else>
+                <p>You never felt this way before. It's okay, it's important to experience new colors</p>
+            </div>
         </div>
 
     </div>
@@ -57,10 +73,18 @@ export default {
         ...mapGetters({
             fav: 'wizard/fav',
             mainColor: 'wizard/mainColor',
-            contrastingColor: 'wizard/constrastingColor'
+            contrastingColor: 'wizard/constrastingColor',
+            user: 'auth/user',
+            getCatsByIds: 'data/getCatsByIds'
         }),
         anyEvent() {
             return this.events.length > 0
+        },
+
+        cats() {
+            return event => {
+                return this.getCatsByIds(event.catIds)
+            }
         }
     },
     mounted() {
@@ -69,6 +93,26 @@ export default {
     methods: {
         getHistory(col) {
 
+            this.busy = true;
+
+            this.$db
+              .collection('events')
+              .where('userId', '==', this.user.uid)
+              .where('colId', '==', this.fav.id)
+              .orderBy('instant', 'desc')
+              .limit(3)
+              .get()
+              .then((documentSnapshots) => {
+
+                  documentSnapshots.forEach((doc) => {
+                    const event = doc.data();
+                    event.id = doc.id;
+
+                    this.events.push(event)
+                  });
+
+                  this.busy = false;
+              });
         }
     }
 }

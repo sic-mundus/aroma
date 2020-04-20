@@ -5258,6 +5258,18 @@ export default {
   getters: {
     all(state) {
       return state.hues
+    },
+
+    getColorById(state) {
+      return id => {
+        return state.hues.find(x => x.id == id)
+      }
+    },
+
+    getCatsByIds(state) {
+      return ids => {
+        return state.cats.filter(x => ids.some(y => y == x.id))
+      }
     }
   },
 
@@ -5328,7 +5340,7 @@ export default {
       })
     },
 
-    getCats( { state} ) {
+    getCats( { state } ) {
 
       return new Promise(function (resolve, reject) {
 

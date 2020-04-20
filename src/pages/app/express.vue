@@ -2,11 +2,11 @@
 <q-page padding class="full-height">
 
     <!--Colors-->
-    <explore @fav-selected="dialog = true"></explore>
+    <explore class="absolute" @fav-selected="dialog = true"></explore>
 
     <!--Dialog-->
     <q-dialog v-model="dialog" >
-        <wizard @insights-selected="dialog = false; completed()"></wizard>
+        <wizard @wizard-completed="completed"></wizard>
     </q-dialog>
 
 </q-page>
@@ -24,12 +24,34 @@ export default {
     data() {
         return {
             dialog: false,
-            step: 1,
         }
     },
     methods: {
-       completed() {
-           this.$router.replace({ name: 'home' })
+       completed(payload) {
+
+           this.dialog = false;
+
+            let event =  {
+                fav: payload.fav.id,
+                cats: payload.cats.map(x => x.id),
+                confession: payload.confession,
+                userId: this.$fb.auth().currentUser.uid,
+            }
+
+            console.log('event:', event)
+            
+           // Writing on database
+           this.$db.collection('events')
+           .doc()
+           .set(event)
+           .then(() => {
+
+               console.log('ok')
+               this.$router.replace({ name: 'home' })
+
+           })
+
+           
        }
     },
     computed: {
@@ -38,4 +60,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0.0;
+}
 </style>

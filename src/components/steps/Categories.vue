@@ -4,7 +4,7 @@
         <!--Info-->
         <div class="col-auto items-center">
             <div class="text-h6 text-center">Why do you feel {{ fav.name }}?</div>
-            <div class="text-subtitle text-center">Select as many reason as you want</div>
+            <div class="text-subtitle text-center">Select as many reasons as you want</div>
         </div>
 
         <!--Categories-->

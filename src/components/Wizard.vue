@@ -71,7 +71,7 @@ export default {
         save() {
 
             let payload = {
-                col: this.fav,
+                fav: this.fav,
                 cats: this.$store.getters['wizard/cats'],
                 confession: this.$store.getters['wizard/confession']
             }
@@ -79,7 +79,7 @@ export default {
             console.log('Here:', payload);
             this.$store.dispatch('wizard/reset').then(() => {
                 console.log('Wizard have been resetted');
-                this.$emit('insights-selected', payload)
+                this.$emit('wizard-completed', payload)
             })
             
         }

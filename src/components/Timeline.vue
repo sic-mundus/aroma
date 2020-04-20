@@ -3,7 +3,7 @@
     <!--Timeline-->
     <q-timeline color="secondary">
       <q-timeline-entry heading>
-        Your Storygit.
+        Your Story.
       </q-timeline-entry>
 
       <q-timeline-entry>
@@ -123,6 +123,22 @@ export default {
     }
   },
   methods: {
+    
+  },
+  firestore() {
+    return {
+      cani: this.$db.collection('users'),
+    }
+  },
+  mounted() {
+    console.log('querying');
+    let a = this.$db.collection('users').get()
+    .then(querySnapshot => {
+      const documents = querySnapshot.docs.map(doc => doc.data())
+      // do something with documents
+      console.log(documents)
+    })
+    
 
   }
 }

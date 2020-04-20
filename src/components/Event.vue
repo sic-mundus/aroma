@@ -1,8 +1,8 @@
 <template>
-    <q-timeline-entry>
+    <q-timeline-entry :color="'aroma-' + color.id">
         <template v-slot:title>
             <div class="row">
-                <div class="circle q-mr-md" :style="{'background-color': color.hex }"></div>
+                <div class="circle q-mr-md" :style="{'background-color': color.hex }" v-if="false"></div>
                 {{ color.name }}
             </div>
         </template>
@@ -13,6 +13,7 @@
         <!--Categorie-->
         <div>
             <q-btn 
+            style="cursor:default !important"
             v-for="cat in cats"
             :key="cat.id"
             flat
@@ -27,9 +28,9 @@
             </q-btn>
         </div>
 
-        <div>
-            <div v-if="event.confession">
-                <p>Confession</p>
+        <!--Confession-->
+        <div class="q-pl-sm">
+            <div v-if="event.confession" class="text-body-2">
                 {{ event.confession }}
             </div>
         </div>
@@ -71,11 +72,9 @@ export default {
             return this.$utils.getContrastingColor(this.color)
         },
 
-        getAvatarUrl() {
-          return event => {
+        avatarUrl() {
             let code = this.color.hex.replace('#', '')
-            return 'http://singlecolorimage.com/get/' + code + '/100x100'
-          }
+            return 'http://singlecolorimage.com/get/' + code + '/150x150'
         },
 
         cats() {

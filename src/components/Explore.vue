@@ -24,7 +24,7 @@
 
     <q-infinite-scroll
       @load="onLoad"
-      :offset="50"
+      :offset="150"
       ref="infinite_scroll"
     >
 

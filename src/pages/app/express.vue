@@ -2,7 +2,7 @@
 <q-page padding class="full-height">
 
     <!--Colors-->
-    <explore class="absolute" @fav-selected="dialog = true"></explore>
+    <explore @fav-selected="dialog = true"></explore>
 
     <!--Dialog-->
     <q-dialog v-model="dialog" >

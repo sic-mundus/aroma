@@ -3,7 +3,7 @@
     <!--Timeline-->
     <q-timeline color="secondary">
       <q-timeline-entry heading>
-        Your Moods.
+        Your Story.
       </q-timeline-entry>
 
       <q-timeline-entry>
@@ -15,10 +15,14 @@
         </template>
 
         <div>
-          <q-btn
+          <!-- <q-btn
             color="primary"
             @click="$emit('on-explore')"
-          >Explore</q-btn>
+          >Explore</q-btn> -->
+          <q-btn
+            color="primary"
+            @click="$router.push({ name: 'express'})"
+          >Let's do it</q-btn>
         </div>
       </q-timeline-entry>
 
@@ -119,6 +123,22 @@ export default {
     }
   },
   methods: {
+    
+  },
+  firestore() {
+    return {
+      cani: this.$db.collection('users'),
+    }
+  },
+  mounted() {
+    console.log('querying');
+    let a = this.$db.collection('users').get()
+    .then(querySnapshot => {
+      const documents = querySnapshot.docs.map(doc => doc.data())
+      // do something with documents
+      console.log(documents)
+    })
+    
 
   }
 }

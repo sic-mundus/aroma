@@ -5,6 +5,7 @@ import RestoringLayout from 'layouts/restoring-layout'
 // Pages
 import Profile from 'pages/app/profile'
 import Home from 'pages/app/home'
+import Express from 'pages/app/express'
 
 export default [{
     path: '/auth',
@@ -41,6 +42,13 @@ export default [{
       path: 'home',
       name: 'home',
       component: Home,
+      meta: {
+        requiresAuth: true
+      }, 
+    }, {
+      path: 'express',
+      name: 'express',
+      component: Express,
       meta: {
         requiresAuth: true
       }, 

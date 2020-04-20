@@ -24,7 +24,7 @@
 
     <q-infinite-scroll
       @load="onLoad"
-      :offset="150"
+      :offset="50"
       ref="infinite_scroll"
     >
 
@@ -53,10 +53,10 @@
             </div>
 
             <!--Info-->
-            <q-card-section>
+            <q-card-section class="q-px-sm">
               <!--Name & Hex-->
               <div class="text-h6">{{ hue.name }}</div>
-              <div class="text-subtitle2" style="opacity:.8">{{ hue.hex }}</div>
+              <div class="text-subtitle2" v-if="false" style="opacity:.8">{{ hue.hex }}</div>
 
               <!--Compass-->
               <q-btn
@@ -150,7 +150,7 @@
         fab
         icon="check"
         :style="{'background-color': fav.hex, 'color': contrasColorOf(fav)}"
-        @click="$emit('stop-exploring')"
+        @click="confirm"
       />
     </q-page-sticky>
 
@@ -161,6 +161,7 @@
 import _ from 'lodash';
 import params from '../params/'
 import Cherry from './Cherry'
+import utils from '../utils'
 export default {
   //props: ['pickered'],
   components: {
@@ -229,7 +230,7 @@ export default {
 
     contrasColorOf(hue) {
       return hue => {
-        return (hue.r * 0.299 + hue.g * 0.587 + hue.b * 0.114) > 170 ? 'black' : 'white'
+        return utils.getContrastingColor(hue)
       }
     },
 
@@ -253,6 +254,7 @@ export default {
   },
   methods: {
     onLoad (page, done) {
+      
       console.log('#### PAGE: [' + page + '] #####')
 
       let payload = {
@@ -261,7 +263,7 @@ export default {
         page: page
       }
 
-      this.$store.dispatch('hues/filter', payload).then(d => {
+      this.$store.dispatch('data/getHues', payload).then(d => {
 
         if (this.exploreIndex === -1) {
           // Append
@@ -334,6 +336,10 @@ export default {
       this.$refs.infinite_scroll.resume();
       this.$refs.infinite_scroll.trigger();
     },
+    confirm() {
+      this.$store.commit('wizard/SET_FAV', this.fav)
+      this.$emit('fav-selected', this.fav);
+    },
     pickeredHandler: _.throttle(function(v) {
 
           let comps = this.pickered.split(',');
@@ -363,6 +369,7 @@ export default {
           'leading': true,
           'trailing': false
         })
+      
   }
 
 }

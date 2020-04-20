@@ -5226,6 +5226,32 @@ export default {
       "r": 44,
       "b": 8,
       "g": 22
+    }],
+
+    cats: [{
+      id: 1,
+      name: 'Work',
+      icon: 'mdi-briefcase'
+    }, {
+      id: 2,
+      name: 'School',
+      icon: 'mdi-school'
+    }, {
+      id: 3,
+      name: 'Friends',
+      icon: 'mdi-account-group'
+    }, {
+      id: 4,
+      name: 'Family',
+      icon: 'mdi-home'
+    }, {
+      id: 5,
+      name: 'Love',
+      icon: 'mdi-heart'
+    }, {
+      id: 6,
+      name: 'Music',
+      icon: 'mdi-music-note'
     }]
   },
 
@@ -5240,9 +5266,7 @@ export default {
   },
 
   actions: {
-    filter({
-      state
-    }, payload) {
+    getHues({ state }, payload) {
 
       let {
         leads,
@@ -5301,6 +5325,14 @@ export default {
 
         resolve(sliced)
 
+      })
+    },
+
+    getCats( { state} ) {
+
+      return new Promise(function (resolve, reject) {
+
+        resolve(state.cats)
       })
     }
   }

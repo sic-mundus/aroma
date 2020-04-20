@@ -76,12 +76,7 @@ export default {
                 confession: this.$store.getters['wizard/confession']
             }
 
-            console.log('Here:', payload);
-            this.$store.dispatch('wizard/reset').then(() => {
-                console.log('Wizard have been resetted');
-                this.$emit('wizard-completed', payload)
-            })
-            
+            this.$emit('wizard-completed', payload) 
         }
     }
 }

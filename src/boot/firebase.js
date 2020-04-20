@@ -3,6 +3,8 @@ import 'firebase/firestore'
 import { firestorePlugin } from 'vuefire'
 require('firebase/auth')
 
+import utils from '../utils'
+
 export default ({
   Vue, store
 }) => {
@@ -19,7 +21,9 @@ export default ({
     const firestore = firebase.firestore()
 
     Vue.prototype.$fb = firebase;
-    Vue.prototype.$db = firestore
+    Vue.prototype.$db = firestore;
+
+    Vue.prototype.$utils = utils;
   }
 
   // Add auth methods to our Vue instance

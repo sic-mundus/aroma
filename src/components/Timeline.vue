@@ -1,146 +1,123 @@
 <template>
-  <div style="padding:32px">
-    <!--Timeline-->
-    <q-timeline color="secondary">
-      <q-timeline-entry heading>
-        Your Story.
-      </q-timeline-entry>
+<div style="padding:32px">
 
-      <q-timeline-entry>
-        <template v-slot:title>
-          Today
+    <q-infinite-scroll @load="onLoad" :offset="50" ref="infinite_scroll">
+
+        <!--Timeline-->
+        <q-timeline color="secondary" :layout="layout">
+
+            <!--Titolo-->
+            <q-timeline-entry heading>
+                Your Story.
+            </q-timeline-entry>
+
+            <!--Oggi-->
+            <q-timeline-entry v-if="canExploreToday">
+              <template v-slot:title>
+                  Today
+              </template>
+              <template v-slot:subtitle>
+                  April 17, 2020
+              </template>
+
+              <div>
+                  <q-btn color="primary" @click="$router.push({ name: 'express'})">Let's do it</q-btn>
+              </div>
+            </q-timeline-entry>
+
+            <!--Mese-->
+            <q-timeline-entry heading>
+                November, 2017
+            </q-timeline-entry>
+
+            <event
+            v-for="event in events"
+            :key="event.id"
+            :heading="'cane'"
+            :event="event"></event>
+
+        </q-timeline>
+
+        <!--Loading-->
+        <template v-slot:loading>
+            <div class="row justify-center q-my-md">
+                <q-spinner-dots color="primary" size="40px" />
+            </div>
         </template>
-        <template v-slot:subtitle>
-          April 17, 2020
-        </template>
-
-        <div>
-          <!-- <q-btn
-            color="primary"
-            @click="$emit('on-explore')"
-          >Explore</q-btn> -->
-          <q-btn
-            color="primary"
-            @click="$router.push({ name: 'express'})"
-          >Let's do it</q-btn>
-        </div>
-      </q-timeline-entry>
-
-      <q-timeline-entry icon="delete">
-        <template v-slot:title>
-          Event Title
-        </template>
-        <template v-slot:subtitle>
-          February 21, 1986
-        </template>
-
-        <div>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </div>
-      </q-timeline-entry>
-
-      <q-timeline-entry heading>
-        November, 2017
-      </q-timeline-entry>
-
-      <q-timeline-entry avatar="https://cdn.quasar.dev/img/avatar5.jpg">
-        <template v-slot:title>
-          Event Title
-        </template>
-        <template v-slot:subtitle>
-          February 22, 1986
-        </template>
-
-        <div>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </div>
-      </q-timeline-entry>
-
-      <q-timeline-entry>
-        <template v-slot:title>
-          Event Title
-        </template>
-        <template v-slot:subtitle>
-          February 22, 1986
-        </template>
-
-        <div>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </div>
-      </q-timeline-entry>
-
-      <q-timeline-entry
-        color="orange"
-        icon="done_all"
-      >
-        <template v-slot:title>
-          Event Title
-        </template>
-        <template v-slot:subtitle>
-          February 22, 1986
-        </template>
-
-        <div>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </div>
-      </q-timeline-entry>
-
-      <q-timeline-entry>
-        <template v-slot:title>
-          Event Title
-        </template>
-        <template v-slot:subtitle>
-          February 22, 1986
-        </template>
-
-        <div>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </div>
-      </q-timeline-entry>
-
-      <q-timeline-entry>
-        <template v-slot:title>
-          Event Title
-        </template>
-        <template v-slot:subtitle>
-          February 22, 1986
-        </template>
-
-        <div>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </div>
-      </q-timeline-entry>
-    </q-timeline>
-  </div>
+    </q-infinite-scroll>
+</div>
 </template>
 
 <script>
+import {
+    mapGetters
+} from 'vuex'
+import Event from './Event'
+import utils from '../utils'
 export default {
-  components: {
-  },
-  data () {
-    return {
-    }
-  },
-  methods: {
-    
-  },
-  firestore() {
-    return {
-      cani: this.$db.collection('users'),
-    }
-  },
-  mounted() {
-    console.log('querying');
-    let a = this.$db.collection('users').get()
-    .then(querySnapshot => {
-      const documents = querySnapshot.docs.map(doc => doc.data())
-      // do something with documents
-      console.log(documents)
-    })
-    
+    components: {
+      Event
+    },
+    data() {
+        return {
+            lastVisible: null,
+            events: []
+        }
+    },
+    computed: {
+        ...mapGetters({
+            user: 'auth/user',
+            getColorById: 'data/getColorById'
+        }),
 
-  }
+        canExploreToday() {
+          return true;
+          return !this.events.some(x => 
+          x.instant.toDate().setHours(0, 0, 0, 0) == new Date().setHours(0,0,0,0));
+        },
+
+        layout() {
+          return this.$q.screen.lt.sm ? 'dense' : (this.$q.screen.lt.md ? 'comfortable' : 'loose')
+        }
+    },
+    methods: {
+
+    },
+    mounted() {
+    },
+    methods: {
+        onLoad(page, done) {
+          
+          var myDone = done;
+          console.log('#### PAGE: [' + page + '] #####')
+          
+          this.$db
+              .collection('events')
+              .where('userId', '==', this.user.uid)
+              .orderBy('instant', 'desc')
+              .startAfter(this.lastVisible || {})
+              .limit(5)
+              .get()
+              .then((documentSnapshots) => {
+
+                  let batch = [];
+                  documentSnapshots.forEach((doc) => {
+                      const event = doc.data();
+                      event.id = doc.id;
+                      this.events.push(event);
+                      batch.push(event.id)
+                  });
+
+                  this.lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
+                  console.log("last", this.lastVisible);
+
+                  let stop = (batch.length === 0);
+
+                  done(stop);
+              });
+
+        }
+    }
 }
 </script>
 

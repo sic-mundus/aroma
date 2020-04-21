@@ -208,12 +208,12 @@ export default {
         },
 
         createDude(user) {
-            console.log('creating dude for user uid', user.uid)
+            console.log('creating dude for the user uid', user.uid)
             return new Promise((resolve, reject) => {
 
                 let dude = {
                     userId: user.uid,
-                    photoUrl: 'booh!',
+                    photoUrl: '',
                     displayName: user.displayName,
                     email: user.email,
                     settings: {

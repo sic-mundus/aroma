@@ -11,32 +11,16 @@
 
         <q-btn flat round dense icon="more_vert">
           <q-menu>
-        <div class="row no-wrap q-pa-md">
-          <div class="column">
-            <div class="text-h6 q-mb-md">Settings</div>
-            <q-toggle v-model="mobileData" label="Use Mobile Data" />
-            <q-toggle v-model="bluetooth" label="Bluetooth" />
-          </div>
-
-          <q-separator vertical inset class="q-mx-lg" />
-
-          <div class="column items-center">
-            <q-avatar size="72px">
-              <img src="https://cdn.quasar.dev/img/avatar4.jpg">
-            </q-avatar>
-
-            <div class="text-subtitle1 q-mt-md q-mb-xs">John Doe</div>
-
-            <q-btn
-              color="primary"
-              label="Logout"
-              push
-              size="sm"
-              v-close-popup
-            />
-          </div>
-        </div>
-      </q-menu>
+            <q-list style="min-width: 200px">
+            <q-item clickable v-close-popup @click="$router.push({ name: 'profile' })">
+              <q-item-section>Profile</q-item-section>
+            </q-item>
+            <q-separator />
+            <q-item clickable v-close-popup @click="signOut">
+              <q-item-section>Signout</q-item-section>
+            </q-item>
+          </q-list>
+          </q-menu>
         </q-btn>
 
       </q-toolbar>
@@ -76,7 +60,7 @@
 </template>
 
 <script>
-
+import { mapGetters } from 'vuex' 
 export default {
   name: 'MainLayout',
 
@@ -85,52 +69,21 @@ export default {
 
   data () {
     return {
-      leftDrawerOpen: false,
-      essentialLinks: [
-        {
-          title: 'Docs',
-          caption: 'quasar.dev',
-          icon: 'school',
-          link: 'https://quasar.dev'
-        },
-        {
-          title: 'Github',
-          caption: 'github.com/quasarframework',
-          icon: 'code',
-          link: 'https://github.com/quasarframework'
-        },
-        {
-          title: 'Discord Chat Channel',
-          caption: 'chat.quasar.dev',
-          icon: 'chat',
-          link: 'https://chat.quasar.dev'
-        },
-        {
-          title: 'Forum',
-          caption: 'forum.quasar.dev',
-          icon: 'record_voice_over',
-          link: 'https://forum.quasar.dev'
-        },
-        {
-          title: 'Twitter',
-          caption: '@quasarframework',
-          icon: 'rss_feed',
-          link: 'https://twitter.quasar.dev'
-        },
-        {
-          title: 'Facebook',
-          caption: '@QuasarFramework',
-          icon: 'public',
-          link: 'https://facebook.quasar.dev'
-        },
-        {
-          title: 'Quasar Awesome',
-          caption: 'Community Quasar projects',
-          icon: 'favorite',
-          link: 'https://awesome.quasar.dev'
-        }
-      ]
+     
     }
-  }
+  },
+  computed: {
+    ...mapGetters({
+      user: 'auth/user',
+      isAuthenticated: 'auth/isAuthenticated'
+    })
+  },
+  methods: {
+    signOut() {
+      this.$signOut().then(() => {
+        console.log('Ok, signed out');
+      })
+    }
+  },
 }
 </script>

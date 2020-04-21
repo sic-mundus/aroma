@@ -143,7 +143,7 @@
     <!--FAB-->
     <q-page-sticky
       position="top-right"
-      v-show="fav.hex"
+      v-show="fav.hex && false"
       :offset="[16,16]"
     >
       <q-btn

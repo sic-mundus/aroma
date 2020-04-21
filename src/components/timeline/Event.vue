@@ -56,7 +56,6 @@ export default {
         }
     },
     mounted() {
-        console.log('event mounted:', this.event)
     },
     computed: {
         ...mapGetters({

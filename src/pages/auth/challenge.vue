@@ -18,7 +18,7 @@
 
                 <q-form ref="form" class="q-px-sm q-pt-xl" @submit="letsParty">
 
-                        <p class="text-center text-body2" v-if="type === 'forgot-password'">Inserisci la tua e-mail. Ti invieremo un link per reimpostare la password</p>
+                    <p class="text-center text-body2" v-if="type === 'forgot-password'">Inserisci la tua e-mail. Ti invieremo un link per reimpostare la password</p>
 
                     <q-input square bottom-slots :rules="rules.email" v-model="form.email" type="email" label="Email" autocomplete="email">
                         <template v-slot:before>
@@ -26,17 +26,17 @@
                         </template>
                     </q-input>
 
-                        <q-input v-if="type === 'sign-up'" square bottom-slots :rules="rules.username" v-model="form.username" type="text" label="Username">
-                            <template v-slot:before>
-                                <q-icon name="mdi-account" />
-                            </template>
-                        </q-input>
+                    <q-input v-if="type === 'sign-up'" square bottom-slots :rules="rules.username" v-model="form.username" type="text" label="Username">
+                        <template v-slot:before>
+                            <q-icon name="mdi-account" />
+                        </template>
+                    </q-input>
 
-                        <q-input v-if="type === 'sign-in' || type === 'sign-up'" square bottom-slots :rules="rules.password" v-model="form.password" type="password" label="Password" autocomplete="new-password">
-                            <template v-slot:before>
-                                <q-icon name="lock" />
-                            </template>
-                        </q-input>
+                    <q-input v-if="type === 'sign-in' || type === 'sign-up'" square bottom-slots :rules="rules.password" v-model="form.password" type="password" label="Password" autocomplete="new-password">
+                        <template v-slot:before>
+                            <q-icon name="lock" />
+                        </template>
+                    </q-input>
 
                     <!--Button-->
                     <q-card-actions class="q-px-lg q-mt-md">
@@ -66,8 +66,7 @@
 
 <script>
 export default {
-    components: {
-    },
+    components: {},
     data() {
         return {
             type: 'sign-in',
@@ -134,18 +133,18 @@ export default {
                 let password = this.form.password;
 
                 this.$signIn(email, password)
-                .then(user => {
+                    .then(user => {
                         this.busy = false
-                })
-                .catch(error => {
-                    this.$q.notify({
-                        color: 'negative',
-                        icon: 'announcement',
-                        message: error.message
                     })
-                    console.error(`Not signed in: ${error.message}`)
-                    this.busy = false
-                })
+                    .catch(error => {
+                        this.$q.notify({
+                            color: 'negative',
+                            icon: 'announcement',
+                            message: error.message
+                        })
+                        console.error(`Not signed in: ${error.message}`)
+                        this.busy = false
+                    })
             }
         },
         signUp() {
@@ -156,8 +155,15 @@ export default {
                 let username = this.form.username;
 
                 this.$signUp(email, password, username)
-                    .then(user => {
-                        this.busy = false
+                    .then((user) => {
+
+                        // Creating profile in firestore
+                        this.createDude(user).then(() => {
+                            this.busy = false
+                        }).catch((error) => {
+                            throw error;
+                        })
+                        
                     })
                     .catch(error => {
                         this.$q.notify({
@@ -197,6 +203,29 @@ export default {
                         this.busy = false
                     })
             }
+        },
+
+        createDude(user) {
+            console.log('creating dude for user uid', user.uid)
+            return new Promise((resolve, reject) => {
+
+                let dude = {
+                    userId: user.uid,
+                    photoUrl: 'booh!',
+                    settings: '88'
+                }
+
+                this.$db
+                    .collection('dudes')
+                    .doc(user.uid)
+                    .set(dude)
+                    .then(() => {
+                        console.log('dude added!')
+                        resolve(dude)
+                    })
+                    .catch((error) => reject(error))
+
+            })
         }
     }
 }

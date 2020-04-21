@@ -158,7 +158,9 @@ export default {
                     .then((user) => {
 
                         // Creating profile in firestore
-                        this.createDude(user).then(() => {
+                        this.createDude(user).then((dude) => {
+
+                            this.$store.commit('auth/SET_ME', dude)
                             this.busy = false
                         }).catch((error) => {
                             throw error;
@@ -212,7 +214,12 @@ export default {
                 let dude = {
                     userId: user.uid,
                     photoUrl: 'booh!',
-                    settings: '88'
+                    displayName: user.displayName,
+                    email: user.email,
+                    settings: {
+                        lang: 'en-US'
+                    },
+                    buddyIds: []
                 }
 
                 this.$db

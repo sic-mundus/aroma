@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 export default {
   name: 'LayoutRestoring',
   data () {
@@ -32,7 +31,6 @@ export default {
     }
   },
   computed: {
-    // ...mapGetters({ isAuthenticated: 'auth/isAuthenticated' })
   },
   mounted () {
    

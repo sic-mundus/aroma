@@ -32,7 +32,7 @@ export default ({
       firebase.auth().signInWithEmailAndPassword(email, password)
         .then((user) => {
 
-          store.commit('auth/SET_USER', user)
+          //store.commit('auth/SET_USER', user)
           resolve(user)
         })
         .catch(error => {
@@ -58,7 +58,7 @@ export default ({
           }).then(() => {
 
             // K.
-            store.commit('auth/SET_USER', user)
+            //store.commit('auth/SET_USER', user)
             resolve(user)
           })
           .catch(error => {
@@ -97,7 +97,5 @@ export default ({
         })
     })
   }
-
-
 
 }

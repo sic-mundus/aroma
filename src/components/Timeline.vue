@@ -17,8 +17,8 @@
              style="max-height: 30vh"/>
 
             <div class="text-h3 text-center text-primary text-bold q-mt-xl">Heya stranger, welcome.</div>
-            <div class="text-h5 text-center text-primary q-mt-sm">This is where your timeline will be</div>
-            <div class="text-h5 text-center text-primary q-mt-sm">You are all set, ready to being?</div>
+            <div class="text-h5 text-center text-primary q-mt-sm">This is where your story will take place.</div>
+            <div class="text-h5 text-center text-primary q-mt-sm">You are all set, ready to begin?</div>
 
             <!--GO-->
             <q-btn class="q-mt-lg" color="primary" @click="explore">
@@ -94,7 +94,7 @@ export default {
     },
     computed: {
         ...mapGetters({
-            user: 'auth/user',
+            me: 'auth/me',
             getColorById: 'data/getColorById'
         }),
 
@@ -112,7 +112,6 @@ export default {
 
     },
     mounted() {
-
         // Check if it's the first time
         this.checkWelcome().then((val) => {
             console.log('welcome:', val)
@@ -128,7 +127,7 @@ export default {
 
             this.$db
                 .collection('events')
-                .where('userId', '==', this.user.uid)
+                .where('userId', '==', this.me.userId)
                 .orderBy('instant', 'desc')
                 .startAfter(this.lastVisible || {})
                 .limit(5)
@@ -172,7 +171,7 @@ export default {
 
                 this.$db
                     .collection('events')
-                    .where('userId', '==', this.user.uid)
+                    .where('userId', '==', this.me.userId)
                     .limit(1)
                     .get()
                     .then((documentSnapshots) => {

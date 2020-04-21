@@ -40,18 +40,33 @@ export default ({
 
       if (user) {
         // Signed in. Let Vuex know.
-        store.commit('auth/SET_USER', user)
 
-        // The .catch ignore error if .replace is redirecting to dashboard and we
-        // are already at that route.
-        // https://github.com/vuejs/vue-router/issues/2881#issuecomment-520554378
-        router.replace({
-          name: 'home'
-        }).catch(() => {})
+        firebase.firestore()
+          .collection('dudes')
+          .doc(user.uid)
+          .get()
+          .then((doc) => {
+            if (doc.exists) {
+              let dude = doc.data();
+              
+              // Commit me into vuex
+              store.commit('auth/SET_ME', dude);
+
+            } else {
+              console.warn('Cannot find dude. Maybe its still being created');
+            }
+
+             // Ok
+             router.replace({
+               name: 'home'
+             }).catch(() => {})
+          })
+        
 
       } else {
         // Signed out. Let Vuex know.
-        store.commit('auth/RESET_USER')
+        store.commit('auth/RESET_ME')
+
         router.replace({
           name: 'challenge'
         }).catch(() => {})

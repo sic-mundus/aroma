@@ -2,8 +2,8 @@
   <q-page padding>
     <h1>Profile</h1>
     <div v-if="isAuthenticated">
-      <h3>{{ user.displayName }}</h3>
-      <h3>{{ user.email }}</h3>
+      <h3>{{ me.displayName }}</h3>
+      <h3>{{ me.email }}</h3>
     </div> 
     <q-btn @click="signOut">
       ESCI
@@ -23,7 +23,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      user: 'auth/user',
+      me: 'auth/me',
       isAuthenticated: 'auth/isAuthenticated'
     })
   }

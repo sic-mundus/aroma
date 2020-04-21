@@ -20,8 +20,6 @@
         </div>
     </div>
 
-     
-
     <q-infinite-scroll
       @load="onLoad"
       :offset="150"
@@ -46,7 +44,7 @@
             <!--Color-->
             <div
               class="color-host"
-              @click.prevent="toggleFav(hue)"
+              @click.prevent="toggleFav(hue); confirm()"
               :style="{ 'background-color': hue.hex }"
             >
 
@@ -116,7 +114,7 @@
         </div>
 
         <!--Picker-->
-       <q-btn icon="palette" class="cursor-pointer"  round flat dense>
+       <q-btn icon="mdi-eyedropper-variant" class="cursor-pointer"  round flat dense>
           <q-tooltip :content-style="{'font-size': '16px'}">
                 Pick a mood and start from there
           </q-tooltip>
@@ -124,6 +122,8 @@
             <q-color class="my-picker" no-header no-footer v-model="pickered" format-model="rgb" :default-value="pickerStartingColor"/>
           </q-popup-proxy>
         </q-btn>
+
+        <q-separator vertical inset dark class="" spaced/>
 
         <!--Shuffle-->
         <q-btn

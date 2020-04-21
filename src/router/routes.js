@@ -4,6 +4,7 @@ import RestoringLayout from 'layouts/restoring-layout'
 
 // Pages
 import Profile from 'pages/app/profile'
+import People from 'pages/app/people'
 import Home from 'pages/app/home'
 import Express from 'pages/app/express'
 
@@ -35,6 +36,13 @@ export default [{
       path: 'profile',
       name: 'profile',
       component: Profile,
+      meta: {
+        requiresAuth: true
+      }
+    }, {
+      path: 'people',
+      name: 'people',
+      component: People,
       meta: {
         requiresAuth: true
       }

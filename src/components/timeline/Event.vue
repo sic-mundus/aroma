@@ -35,32 +35,15 @@
     <div class="q-mt-md" v-if="anyNewbie">
         <div class="text-subtitle1">New buddies</div>
         <q-card class="my-card justify-start">
-           <newbie v-for="(dude, idx) in newbies"
-           :key="idx"
-           :dude="dude"></newbie>
+            <newbie v-for="(dude, idx) in newbies" :key="idx" :dude="dude" @request-add-buddy="add2Buddies"></newbie>
         </q-card>
     </div>
 
-    <!--Oldies-->
-    <div class="q-mt-md" v-if="anyOldie">
+    <!--Buddies-->
+    <div class="q-mt-md" v-if="anyBuddy">
         <div class="text-subtitle1">Your buddies</div>
         <q-card class="my-card justify-start">
-            <div v-for="(dude, idx) in oldies" :key="idx">
-                <q-item>
-                    <q-item-section avatar>
-                        <q-avatar>
-                            <img src="https://cdn.quasar.dev/img/avatar2.jpg">
-                        </q-avatar>
-                    </q-item-section>
-
-                    <q-item-section>
-                        <q-item-label><span class="text-bold">78%</span> fffinity</q-item-label>
-                        <q-item-label caption>@username</q-item-label>
-                    </q-item-section>
-                </q-item>
-
-                <q-separator></q-separator>
-            </div>
+            <buddy v-for="(dude, idx) in buddies" :key="idx" :dude="dude" @request-add-buddy="add2Buddies"></buddy>
 
         </q-card>
     </div>
@@ -73,9 +56,11 @@ import {
     mapGetters
 } from 'vuex'
 import Newbie from './Newbie'
+import Buddy from './Buddy'
 export default {
     components: {
-        Newbie
+        Newbie,
+        Buddy
     },
     props: {
         event: {
@@ -86,7 +71,7 @@ export default {
     data() {
         return {
             newbies: [],
-            oldies: []
+            buddies: []
         }
     },
     mounted() {
@@ -119,19 +104,21 @@ export default {
             return this.newbies.length > 0
         },
 
-        anyOldie() {
-            return this.oldies.length > 0
+        anyBuddy() {
+            return this.buddies.length > 0
         }
 
     },
     methods: {
         getNewbies() {
 
+            const REQUESTED_AFFINITY = 20;
             // Retrieve all events of this day
-            // of dudes that picked the same color as yours
+            // of dudes that picked the same color as yours (or a close one)
             this.$db
                 .collection('events')
-                .where('colId', '==', this.event.colId)
+                .where('colId', '>=', this.event.colId - REQUESTED_AFFINITY)
+                .where('colId', '<=', this.event.colId + REQUESTED_AFFINITY)
                 .where('day', '==', this.event.day)
                 .limit(4) // Note: one will always be you
                 .get()
@@ -156,12 +143,15 @@ export default {
                                     } else {
                                         // Newbie
                                         // This is a new connection!
+                                        console.log('pushing', dude)
                                         this.newbies.push(dude)
                                     }
 
                                 })
-                                .catch((error) => { console.error('Dude with id' + event.userId + ' not found in firestore') })
-                        
+                                .catch((error) => {
+                                    console.error('Dude with id' + event.userId + ' not found in firestore')
+                                })
+
                         } else {
                             // It's me, mario
                         }
@@ -172,25 +162,24 @@ export default {
         },
 
         getBuddies() {
-            
+
             let myBuddiesIds = this.me.buddyIds;
 
-
             this.$db
-            .collection('dudes')
-            .where('userId', 'in', myBuddiesIds)
-            .get()
-            .limit(3)
-            .then((docs) => {
+                .collection('dudes')
+                .where('userId', 'in', myBuddiesIds)
+                .get()
+                .limit(3)
+                .then((docs) => {
 
-                docs.forEach((doc) => {
+                    docs.forEach((doc) => {
 
-                    let dude = doc.data();
-                    console.log('found a friend');
+                        let dude = doc.data();
+                        console.log('found a friend');
+
+                    })
 
                 })
-
-            })
         },
 
         getDudeById(id) {
@@ -208,6 +197,31 @@ export default {
                         }
                     })
             })
+        },
+
+        add2Buddies(dude) {
+
+            let myBuddies = [...this.me.buddyIds];
+            myBuddies.push(dude.userId);
+
+            this.$db
+                .collection('dudes')
+                .doc(this.me.userId)
+                .set({
+                    buddyIds: myBuddies
+                }, { merge: true })
+                .then(() => {
+
+                    // Remove from newbies
+                    this.newbies = this.newbies.filter(x => x.userId !== dude.userId)
+
+                    // Add to buddies
+                    if (!this.buddies.some(x => x.userId == dude.userId)) {
+                        this.buddies.push(dude)
+                    }
+
+                })
+
         }
     }
 }

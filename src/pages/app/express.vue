@@ -51,7 +51,8 @@ export default {
             console.log('event:', event)
             
            // Writing on database
-           this.$db.collection('events')
+           this.$db
+           .collection('events')
            .add(event)
            .then(() => {
 

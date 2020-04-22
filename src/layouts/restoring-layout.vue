@@ -33,25 +33,38 @@ export default {
   computed: {
   },
   mounted () {
-   
+   console.log('ready to redirect');
    this.redirect();
   },
   methods: {
-    async redirect() {
+    redirect() {
 
-      let unsubscribe = this.$fb.auth().onAuthStateChanged(user => {
+      this.$fb.auth().onAuthStateChanged(user => {
           let isAuthenticated = user !== null;
 
           console.log('mounted restoring: authenticated', isAuthenticated)
           if (isAuthenticated) {
-              this.$router.replace('/app')
+
+            this.$db
+              .collection('dudes')
+              .doc(user.uid)
+              .get()
+              .then((doc) => {
+                if (doc.exists) {
+                  let dude = doc.data();
+                  
+                  // Commit me into vuex
+                  this.$store.commit('auth/SET_ME', dude);
+                  this.$router.replace('/app/home').catch(() => {})
+                } 
+              })
+            
+            
           } else {
-              this.$router.replace('/auth')
+            this.$router.replace('/auth')
           }
       })
 
-      unsubscribe();
-     
     }
   }
 }

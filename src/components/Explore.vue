@@ -6,7 +6,7 @@
     >
       <div class="column justify-center items-center">
         <div class="text-h3 text-center text-primary text-bold">What color do you feel like today?</div>
-        <div class="text-h5 text-center text-primary q-mt-sm">don't overthink it.<br>just scroll down and select whaterver color suits you right now</div>
+        <div class="text-h5 text-center text-primary q-mt-sm">take your time, scroll down and select whaterver color suits you right now</div>
 
          <!--Scroll-->
           <q-btn

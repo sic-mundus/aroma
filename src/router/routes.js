@@ -16,6 +16,11 @@ export default [{
       path: 'challenge',
       name: 'challenge',
       component: () => import('pages/auth/challenge')
+    }, 
+    {
+      path: 'about-you',
+      name: 'anagraphic',
+      component: () => import('pages/auth/anagraphic')
     }]
   },
 

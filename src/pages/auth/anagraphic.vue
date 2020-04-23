@@ -112,7 +112,7 @@ export default {
             if (this.image.previewUrl)
                 return this.image.previewUrl;
 
-            return 'https://eu.ui-avatars.com/api/?name=' + this.form.fullName.replace(' ','+')
+            return 'https://avatar.oxro.io/avatar.svg?name=' + this.form.fullName.replace(' ','+') + '&caps=3&bold=true'
         }
     },
     mounted() {

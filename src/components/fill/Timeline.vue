@@ -56,7 +56,7 @@
                 </div>
             </q-timeline-entry>
 
-            <component v-for="(event, idx) in events" :key="idx" :is="(event.isGroup ? 'Group' : 'Event')" :group="event" :event="event"></component>
+            <component v-for="(event, idx) in events" :key="idx" :is="(event.isGroup ? 'TimeGroup' : 'Event')" :group="event" :event="event"></component>
 
         </q-timeline>
 
@@ -74,13 +74,12 @@
 import {
     mapGetters
 } from 'vuex'
-import Event from './timeline/Event'
-import Group from './timeline/Group'
-import utils from '../utils'
+import Event from '../kit/Event'
+import TimeGroup from '../kit/TimeGroup'
 export default {
     components: {
         Event,
-        Group
+        TimeGroup
     },
     data() {
         return {
@@ -194,7 +193,7 @@ export default {
 
         explore() {
             this.$router.push({
-                name: 'express'
+                name: 'browse'
             })
         }
     }

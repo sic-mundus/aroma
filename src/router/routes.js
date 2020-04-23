@@ -1,26 +1,26 @@
 // Layouts
-import MainLayout from 'layouts/main-layout'
-import RestoringLayout from 'layouts/restoring-layout'
+import MainLayout from 'layouts/MainLayout'
+import RestoringLayout from 'layouts/RestoringLayout'
 
 // Pages
-import Profile from 'pages/app/profile'
-import People from 'pages/app/people'
-import Home from 'pages/app/home'
-import Express from 'pages/app/express'
+import Profile from 'pages/app/Profile'
+import People from 'pages/app/People'
+import Home from 'pages/app/Home'
+import Browse from 'pages/app/Browse'
 
 export default [{
     path: '/auth',
     redirect: 'auth/challenge',
-    component: () => import('layouts/auth-layout'),
+    component: () => import('layouts/AuthLayout'),
     children: [{
       path: 'challenge',
       name: 'challenge',
-      component: () => import('pages/auth/challenge')
+      component: () => import('pages/auth/Challenge')
     }, 
     {
       path: 'about-you',
       name: 'anagraphic',
-      component: () => import('pages/auth/anagraphic')
+      component: () => import('pages/auth/Anagraphic')
     }]
   },
 
@@ -59,9 +59,9 @@ export default [{
         requiresAuth: true
       }, 
     }, {
-      path: 'express',
-      name: 'express',
-      component: Express,
+      path: 'browse',
+      name: 'browse',
+      component: Browse,
       meta: {
         requiresAuth: true
       }, 

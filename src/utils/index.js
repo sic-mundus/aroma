@@ -7,11 +7,11 @@ export default {
   },
 
   formatDateFull(d) {
-    return moment(d).format('ddd, d MMM YYYY')
+    return moment(d).format('ddd, d MMM YYYY, hh:mm A')
   },
 
   formatTimestampFull(t) {
-    return moment(t.toDate()).format('ddd, d MMM YYYY')
+    return moment(t.toDate()).format('ddd, d MMM YYYY, hh:mm A')
   },
 
   getTimelineGroup(t) {

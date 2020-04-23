@@ -5279,9 +5279,17 @@ export default {
           Math.abs(col1.g - col2.g) +
           Math.abs(col1.b - col2.b);
 
-        let max = state.hues.length;
+        // Compare it with the distance
+        // among the two ends of the scale
+        let first = state.hues[0];
+        let last = state.hues[state.hues.length - 1]
 
-        let affinity = 1 - (distance / max)
+        let scale = Math.abs(first.r - last.r) +
+          Math.abs(first.g - last.g) +
+          Math.abs(first.b - last.b);
+
+
+        let affinity = 1 - (distance / scale)
         return affinity;
       }
     }

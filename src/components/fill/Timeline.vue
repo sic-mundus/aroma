@@ -41,18 +41,34 @@
             </q-timeline-entry>
 
             <!--Oggi-->
-            <q-timeline-entry v-if="canExploreToday">
+            <q-timeline-entry v-if="!anyEntryToday">
                 <template v-slot:title>
                     Today
                 </template>
                 <template v-slot:subtitle>
-                    {{$utils.formatDateFull(new Date())}}
+                    Now
                 </template>
 
                 <div>
                     <div class="text-body2">Looks like you haven't choose a color today</div>
                     <div class="text-body2">Ready to pick one?</div>
                     <q-btn color="primary" class="q-mt-md" @click="explore">Let's do it</q-btn>
+                </div>
+            </q-timeline-entry>
+
+            <!--Append at today-->
+            <q-timeline-entry v-else>
+                <template v-slot:title>
+                    Today
+                </template>
+                <template v-slot:subtitle>
+                    Now
+                </template>
+
+                <div>
+                    <div class="text-body2">Feeling like exploring some more?</div>
+                    <div class="text-body2">No problem, just pick another color</div>
+                    <q-btn color="primary" class="q-mt-md" @click="explore">PICK</q-btn>
                 </div>
             </q-timeline-entry>
 
@@ -97,10 +113,9 @@ export default {
             getColorById: 'data/getColorById'
         }),
 
-        canExploreToday() {
-            return true;
-            return !this.events.some(x =>
-                x.instant.toDate().setHours(0, 0, 0, 0) == new Date().setHours(0, 0, 0, 0));
+        anyEntryToday() {
+            return this.events.some(x =>
+                x.day == new Date().setHours(0, 0, 0, 0));
         },
 
         layout() {

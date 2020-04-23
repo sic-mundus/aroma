@@ -100,7 +100,7 @@ export default {
     methods: {
         getDudesOfEvent() {
 
-            const REQUESTED_AFFINITY = 100;
+            const REQUESTED_AFFINITY = 5;
 
             // Retrieve all events of this day
             // of dudes that picked the same color as yours (or a close one)

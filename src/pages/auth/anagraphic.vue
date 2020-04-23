@@ -33,7 +33,7 @@
                             />
                         </div>
                         <div class="column col-sm-12 col-md-auto q-ml-lg" style="min-width:480px">
-                            <q-input square filled bottom-slots :rules="rules.fullName" v-model="form.fullName" type="text" label="Your name">
+                            <q-input square filled bottom-slots :rules="rules.fullName" v-model="form.fullName" type="text" label="Your full name">
                                 <template v-slot:before>
                                     <q-icon name="mdi-tag" />
                                 </template>

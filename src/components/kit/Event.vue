@@ -34,7 +34,7 @@
     <!--Dudes-->
     <div class="q-mt-md" v-if="anyDude">
         <div class="text-subtitle1">Your buddies</div>
-        <q-card class="my-card justify-start">
+        <q-card class="my-card">
             <dude v-for="(dude, idx) in dudes" 
             :key="idx" 
             :dude="dude" 
@@ -100,7 +100,7 @@ export default {
     methods: {
         getDudesOfEvent() {
 
-            const REQUESTED_AFFINITY = 20;
+            const REQUESTED_AFFINITY = 100;
 
             // Retrieve all events of this day
             // of dudes that picked the same color as yours (or a close one)
@@ -121,7 +121,7 @@ export default {
                         // NB: This check has to be done client-side
                         // b/c Firestore doesn't support inequality comparison
                         if (event.userId !== this.me.userId) {
-
+                            
                             // Retrieve user of this event
                             this.getDudeById(event.userId).then((dude) => {
                                     
@@ -129,17 +129,6 @@ export default {
                                     dude['colId'] = event.colId;
 
                                     this.dudes.push(dude);
-
-                                    // if (this.me.buddyIds.some(x => x == dude.userId)) {
-                                    //     // Oldie
-                                    //     // This dude is already in your buddies list
-
-                                    // } else {
-                                    //     // Newbie
-                                    //     // This is a new connection!
-                                    //     console.log('pushing', dude)
-                                    //     this.newDudes.push(dude)
-                                    // }
 
                                 })
                                 .catch((error) => {

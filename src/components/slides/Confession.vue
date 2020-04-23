@@ -4,7 +4,7 @@
         <!--Info-->
         <div class="col-auto items-center">
             <div class="text-h6 text-center">Do you want to spend a few words about it?</div>
-            <div class="text-subtitle text-center">This is totally optional, and it will remain private</div>
+            <div class="text-subtitle text-center">This is totally optional, if someone private</div>
         </div>
 
         <!--Confession-->

@@ -5270,6 +5270,20 @@ export default {
       return ids => {
         return state.cats.filter(x => ids.some(y => y == x.id))
       }
+    },
+
+    getAffinity(state) {
+      return (col1, col2) => {
+
+        let distance = Math.abs(col1.r - col2.r) +
+          Math.abs(col1.g - col2.g) +
+          Math.abs(col1.b - col2.b);
+
+        let max = state.hues.length;
+
+        let affinity = 1 - (distance / max)
+        return affinity;
+      }
     }
   },
 

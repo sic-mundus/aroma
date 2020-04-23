@@ -13,10 +13,17 @@
             <!--2nd line-->
             <q-item-label v-if="pickedSameColor" caption>Picked your exact same color</q-item-label>
             <q-item-label v-else caption>Picked {{ hisColor.name }}</q-item-label>
-            <q-item-label>Buddy? {{ isMyBuddy }}</q-item-label>
+            <q-item-label class="q-pt-sm">
+                  <q-linear-progress rounded 
+                  :value="affinity" 
+                  :color="'aroma-' + hisColor.id"
+                  :track-color="$utils.getContrastingColor(hisColor)" />
+            </q-item-label>
+            <q-item-label caption>Affinity: {{ affinityHuman }}%</q-item-label>
         </q-item-section>
 
         <q-item-section avatar>
+
           <q-btn 
           v-if="!isMyBuddy"
           flat 
@@ -27,6 +34,19 @@
           @click="add">
               <q-tooltip :content-style="{'font-size': '16px'}">
                 Add to your buddies
+            </q-tooltip>
+          </q-btn>
+
+           <q-btn 
+          v-else
+          flat 
+          round 
+          :icon="'mdi-hand'" 
+          :size="'md'" 
+          color="primary"
+          @click="hi">
+              <q-tooltip :content-style="{'font-size': '16px'}">
+                Wave at {{ dude.displayName }}
             </q-tooltip>
           </q-btn>
         </q-item-section>
@@ -58,7 +78,8 @@ export default {
     computed: {
         ...mapGetters({
             me: 'auth/me',
-            getColorById: 'data/getColorById'
+            getColorById: 'data/getColorById',
+            getAffinity: 'data/getAffinity'
         }),
 
         avatarSrc() {
@@ -77,6 +98,15 @@ export default {
         isMyBuddy() {
             let myBuddies = this.me.buddyIds;
             return myBuddies.some(x => x == this.dude.userId)
+        },
+
+
+        affinity() {
+           return this.getAffinity(this.hisColor, this.myColor);     
+        },
+
+        affinityHuman() {
+            return (this.affinity * 100).toFixed(2)
         }
     },
     methods: {
@@ -100,15 +130,18 @@ export default {
                     let me = {...this.me};
                     me.buddyIds = myBuddies;
                     this.$store.commit('auth/SET_ME', me)
+
+                    this.$q.notify(this.dude.displayName + ' added to your network')
                 })
         },
+
+        hi() {
+
+        }
     },
     mounted() {
         this.myColor = this.getColorById(this.event.colId)
         this.hisColor = this.getColorById(this.dude.colId) // Extended
-
-        console.log('My color is ' + this.event.colId +':', this.myColor);
-        console.log('His color is ' + this.dude.colId +':', this.hisColor);
     }
 
 }

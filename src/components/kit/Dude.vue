@@ -6,8 +6,13 @@
         </q-item-section>
 
         <q-item-section>
+
+            <!--First Line-->
             <q-item-label>@{{ dude.displayName }}</q-item-label>
-            <q-item-label caption>Picked the same color as you</q-item-label>
+
+            <!--2nd line-->
+            <q-item-label v-if="pickedSameColor" caption>Picked your exact same color</q-item-label>
+            <q-item-label v-else caption>Picked {{ hisColor.name }}</q-item-label>
         </q-item-section>
 
         <q-item-section avatar>
@@ -24,14 +29,29 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
     props: {
-        dude: {
+        dude: { // Note: this is not me, it's a random dude
+            type: Object,
+            required: true
+        },
+        event: { // This is my event!
             type: Object,
             required: true
         }
     },
+    data() {
+        return {
+            hisColor: {},
+            myColor: {}
+        }
+    },
     computed: {
+        ...mapGetters({
+            getColorById: 'data/getColorById'
+        }),
+
         avatarSrc() {
             if (this.dude.picUrl)
                 return this.dude.picUrl;
@@ -39,15 +59,24 @@ export default {
                 return 'https://eu.ui-avatars.com/api/?name=' + this.dude.fullName.replace(' ','+')
             else
                 return ''
+        },
+
+        pickedSameColor() {
+            return this.dude.colId ==this.event.colId
         }
     },
     methods: {
+
         add() {
             this.$emit('request-add-buddy', this.dude)
-        }
+        },
     },
     mounted() {
-        console.log('mounted newbie:', this.dude)
+        this.myColor = this.getColorById(this.event.colId)
+        this.hisColor = this.getColorById(this.dude.colId) // Extended
+
+        console.log('My color is ' + this.event.colId +':', this.myColor);
+        console.log('His color is ' + this.dude.colId +':', this.hisColor);
     }
 
 }

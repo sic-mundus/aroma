@@ -159,9 +159,8 @@
 
 <script>
 import _ from 'lodash';
-import params from '../params/'
-import Cherry from './Cherry'
-import utils from '../utils'
+import params from '../../params/'
+import Cherry from '../kit/Cherry'
 export default {
   //props: ['pickered'],
   components: {

@@ -13,9 +13,8 @@
 </template>
 
 <script>
-import Explore from '../../components/Explore'
-import Wizard from '../../components/wizard'
-
+import Explore from '../../components/fill/Explore'
+import Wizard from '../../components/dialogs/wizard'
 export default {
     components: {
         Explore,

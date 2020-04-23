@@ -8,8 +8,7 @@
 </template>
 
 <script>
-import Timeline from '../../components/Timeline';
-//import Explore from '../../components/Explore';
+import Timeline from '../../components/fill/Timeline';
 export default {
     components: {
         Timeline,

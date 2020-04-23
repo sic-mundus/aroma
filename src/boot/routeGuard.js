@@ -69,9 +69,10 @@ export default ({
         .then((doc) => {
 
           if (doc.exists) {
-            console.log('dude found in firestore!');
-
+            
             let me = doc.data();
+            console.log('dude found in firestore!', me);
+
             store.commit('auth/SET_ME', me)
 
             router.replace({

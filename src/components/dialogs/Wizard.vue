@@ -43,9 +43,9 @@
 </template>
 
 <script>
-import Review from './steps/Review'
-import Categories from './steps/Categories'
-import Confession from './steps/Confession'
+import Review from '../slides/Review'
+import Categories from '../slides/Categories'
+import Confession from '../slides/Confession'
 import {
     mapGetters
 } from 'vuex'

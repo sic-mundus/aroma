@@ -44,13 +44,15 @@ export default {
                 catIds: payload.cats.map(x => x.id),
                 confession: payload.confession,
                 instant: this.$fb.firestore.Timestamp.now(),
+                day: new Date().setHours(0, 0, 0 ,0),
                 userId: this.$fb.auth().currentUser.uid,
             }
 
             console.log('event:', event)
             
            // Writing on database
-           this.$db.collection('events')
+           this.$db
+           .collection('events')
            .add(event)
            .then(() => {
 

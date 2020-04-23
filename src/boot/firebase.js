@@ -1,5 +1,6 @@
 import firebase from 'firebase/app'
 import 'firebase/firestore'
+import 'firebase/storage';
 import { firestorePlugin } from 'vuefire'
 require('firebase/auth')
 
@@ -19,9 +20,11 @@ export default ({
 
     // Initialize Cloud Firestore through Firebase
     const firestore = firebase.firestore()
+    const storage = firebase.storage();
 
     Vue.prototype.$fb = firebase;
     Vue.prototype.$db = firestore;
+    Vue.prototype.$st = storage;
 
     Vue.prototype.$utils = utils;
   }
@@ -32,7 +35,7 @@ export default ({
       firebase.auth().signInWithEmailAndPassword(email, password)
         .then((user) => {
 
-          store.commit('auth/SET_USER', user)
+          //store.commit('auth/SET_USER', user)
           resolve(user)
         })
         .catch(error => {
@@ -44,23 +47,27 @@ export default ({
   Vue.prototype.$signUp = (email, password, username) => {
     return new Promise((resolve, reject) => {
       firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then((user) => {
+        .then((resp) => {
+
+          let user = resp.user;
 
           // Updating displayName
           console.log('Updating displayName');
-          user.user.updateProfile({
+          user.updateProfile({
             displayName: username
           }).then(() => {
             console.log('displayName updated. Sending verify email')
-            return user.user.sendEmailVerification()
+            user.sendEmailVerification()
           }).then(() => {
-            console.log('Done')
-          }).catch(error => {
+
+            // K.
+            //store.commit('auth/SET_USER', user)
+            resolve(user)
+          })
+          .catch(error => {
             throw error
           })
-
-          store.commit('auth/SET_USER', user)
-          resolve(user)
+         
         })
         .catch(error => {
           reject(error)
@@ -93,7 +100,5 @@ export default ({
         })
     })
   }
-
-
 
 }

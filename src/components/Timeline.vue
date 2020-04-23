@@ -1,7 +1,36 @@
 <template>
-<div style="padding:32px">
+<div>
 
-    <q-infinite-scroll @load="onLoad" :offset="50" ref="infinite_scroll">
+    <!--Skeleton-->
+    <div v-if="skeleton" class="full-width full-height text-center align-center">
+
+        <q-circular-progress size="50px" color="primary" indeterminate class="q-ma-md" />
+
+    </div>
+
+    <!--Welcome-->
+    <div v-else-if="welcome" class="motivation-header items-center q-mt-xl">
+
+        <div class="column justify-center items-center">
+
+             <img :src="'/statics/undraw_palette.svg'"
+             style="max-height: 30vh"/>
+
+            <div class="text-h3 text-center text-primary text-bold q-mt-xl">Heya stranger, welcome.</div>
+            <div class="text-h5 text-center text-primary q-mt-sm">This is where your story will take place.</div>
+            <div class="text-h5 text-center text-primary q-mt-sm">You are all set, ready to begin?</div>
+
+            <!--GO-->
+            <q-btn class="q-mt-lg" color="primary" @click="explore">
+                LET'S DO IT
+            </q-btn>
+        </div>
+    </div>
+
+    <q-infinite-scroll v-else @load="onLoad" 
+    :offset="50" 
+    class="q-pa-xl"
+    ref="infinite_scroll">
 
         <!--Timeline-->
         <q-timeline color="secondary" :layout="layout">
@@ -13,28 +42,21 @@
 
             <!--Oggi-->
             <q-timeline-entry v-if="canExploreToday">
-              <template v-slot:title>
-                  Today
-              </template>
-              <template v-slot:subtitle>
-                  April 17, 2020
-              </template>
+                <template v-slot:title>
+                    Today
+                </template>
+                <template v-slot:subtitle>
+                    {{$utils.formatDateFull(new Date())}}
+                </template>
 
-              <div>
-                  <div class="text-body2">Looks like you haven't choose a color today</div>
-                  <div class="text-body2">Ready to pick one?</div>
-                  <q-btn color="primary" 
-                  class="q-mt-md"
-                  @click="$router.push({ name: 'express'})">Let's do it</q-btn>
-              </div>
+                <div>
+                    <div class="text-body2">Looks like you haven't choose a color today</div>
+                    <div class="text-body2">Ready to pick one?</div>
+                    <q-btn color="primary" class="q-mt-md" @click="explore">Let's do it</q-btn>
+                </div>
             </q-timeline-entry>
 
-            <component
-            v-for="(event, idx) in events"
-            :key="idx"
-            :is="(event.isGroup ? 'Group' : 'Event')"
-            :group="event"
-            :event="event"></component>
+            <component v-for="(event, idx) in events" :key="idx" :is="(event.isGroup ? 'Group' : 'Event')" :group="event" :event="event"></component>
 
         </q-timeline>
 
@@ -57,80 +79,123 @@ import Group from './timeline/Group'
 import utils from '../utils'
 export default {
     components: {
-      Event,
-      Group
+        Event,
+        Group
     },
     data() {
         return {
             lastVisible: null,
             lastGroup: false,
             events: [],
+
+            welcome: false,
+            skeleton: true
         }
     },
     computed: {
         ...mapGetters({
-            user: 'auth/user',
+            me: 'auth/me',
             getColorById: 'data/getColorById'
         }),
 
         canExploreToday() {
-          return true;
-          return !this.events.some(x => 
-          x.instant.toDate().setHours(0, 0, 0, 0) == new Date().setHours(0,0,0,0));
+            return true;
+            return !this.events.some(x =>
+                x.instant.toDate().setHours(0, 0, 0, 0) == new Date().setHours(0, 0, 0, 0));
         },
 
         layout() {
-          return this.$q.screen.lt.sm ? 'dense' : (this.$q.screen.lt.md ? 'comfortable' : 'loose')
+            return this.$q.screen.lt.sm ? 'dense' : (this.$q.screen.lt.md ? 'comfortable' : 'loose')
         }
     },
     methods: {
 
     },
     mounted() {
+        // Check if it's the first time
+        this.checkWelcome().then((val) => {
+            console.log('welcome:', val)
+            this.welcome = val;
+            this.skeleton = false;
+        })
+
     },
     methods: {
         onLoad(page, done) {
-          
-          console.log('#### PAGE: [' + page + '] #####')
-                  
-          this.$db
-              .collection('events')
-              .where('userId', '==', this.user.uid)
-              .orderBy('instant', 'desc')
-              .startAfter(this.lastVisible || {})
-              .limit(5)
-              .get()
-              .then((documentSnapshots) => {
 
-                  let batch = [];
-                  documentSnapshots.forEach((doc) => {
-                      const event = doc.data();
-                      event.id = doc.id;
+            console.log('#### PAGE: [' + page + '] #####')
 
-                      // Insert group?
-                      let group = this.$utils.getTimelineGroup(event.instant)
-                      if (group != this.lastGroup) {
-                          this.events.push({
-                              isGroup: true,
-                              groupName: this.$utils.getTimelineHumanGroupName(event.instant)
-                          })
+            this.$db
+                .collection('events')
+                .where('userId', '==', this.me.userId)
+                .orderBy('instant', 'desc')
+                .startAfter(this.lastVisible || {})
+                .limit(5)
+                .get()
+                .then((documentSnapshots) => {
 
-                          this.lastGroup = group;
-                      }
+                    let batch = [];
+                    documentSnapshots.forEach((doc) => {
+                        const event = doc.data();
+                        event.id = doc.id;
 
-                      this.events.push(event);
+                        // Insert group?
+                        let group = this.$utils.getTimelineGroup(event.instant)
+                        if (group != this.lastGroup) {
+                            this.events.push({
+                                isGroup: true,
+                                groupName: this.$utils.getTimelineHumanGroupName(event.instant)
+                            })
 
-                      batch.push(event.id)
-                  });
+                            this.lastGroup = group;
+                        }
 
-                  // Extact last visible to paginate the next request
-                  this.lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
+                        this.events.push(event);
 
-                  let stop = (batch.length === 0);
+                        batch.push(event.id)
+                    });
 
-                  done(stop);
-              });
+                    // Extact last visible to paginate the next request
+                    this.lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
 
+                    let stop = (batch.length === 0);
+
+                    done(stop);
+                });
+
+        },
+
+        checkWelcome() {
+
+            return new Promise((resolve, reject) => {
+
+                this.$db
+                    .collection('events')
+                    .where('userId', '==', this.me.userId)
+                    .limit(1)
+                    .get()
+                    .then((documentSnapshots) => {
+
+                        let batch = [];
+                        documentSnapshots.forEach((doc) => {
+                            const event = doc.data();
+                            event.id = doc.id;
+                            batch.push(event.id)
+                        });
+
+                        let any = batch.length > 0
+
+                        resolve(!any)
+                    });
+
+            })
+
+        },
+
+        explore() {
+            this.$router.push({
+                name: 'express'
+            })
         }
     }
 }

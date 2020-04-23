@@ -6,7 +6,7 @@
     >
       <div class="column justify-center items-center">
         <div class="text-h3 text-center text-primary text-bold">What color do you feel like today?</div>
-        <div class="text-h5 text-center text-primary q-mt-sm">don't overthink it.<br>just scroll down and select whaterver color suits you right now</div>
+        <div class="text-h5 text-center text-primary q-mt-sm">take your time, scroll down and select whaterver color suits you right now</div>
 
          <!--Scroll-->
           <q-btn
@@ -19,8 +19,6 @@
           />
         </div>
     </div>
-
-     
 
     <q-infinite-scroll
       @load="onLoad"
@@ -46,7 +44,7 @@
             <!--Color-->
             <div
               class="color-host"
-              @click.prevent="toggleFav(hue)"
+              @click.prevent="toggleFav(hue); confirm()"
               :style="{ 'background-color': hue.hex }"
             >
 
@@ -116,7 +114,7 @@
         </div>
 
         <!--Picker-->
-       <q-btn icon="palette" class="cursor-pointer"  round flat dense>
+       <q-btn icon="mdi-eyedropper-variant" class="cursor-pointer"  round flat dense>
           <q-tooltip :content-style="{'font-size': '16px'}">
                 Pick a mood and start from there
           </q-tooltip>
@@ -124,6 +122,8 @@
             <q-color class="my-picker" no-header no-footer v-model="pickered" format-model="rgb" :default-value="pickerStartingColor"/>
           </q-popup-proxy>
         </q-btn>
+
+        <q-separator vertical inset dark class="" spaced/>
 
         <!--Shuffle-->
         <q-btn
@@ -143,7 +143,7 @@
     <!--FAB-->
     <q-page-sticky
       position="top-right"
-      v-show="fav.hex"
+      v-show="fav.hex && false"
       :offset="[16,16]"
     >
       <q-btn

@@ -15,7 +15,7 @@ export default {
   },
 
   getTimelineGroup(t) {
-    return moment(t.toDate()).format('ddYYYY')
+    return moment(t.toDate()).format('MMYYYY')
   },
 
   getTimelineHumanGroupName(t) {

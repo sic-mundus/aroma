@@ -74,7 +74,7 @@ export default {
             fav: 'wizard/fav',
             mainColor: 'wizard/mainColor',
             contrastingColor: 'wizard/constrastingColor',
-            user: 'auth/user',
+            me: 'auth/me',
             getCatsByIds: 'data/getCatsByIds'
         }),
         anyEvent() {
@@ -97,7 +97,7 @@ export default {
 
             this.$db
               .collection('events')
-              .where('userId', '==', this.user.uid)
+              .where('userId', '==', this.me.userId)
               .where('colId', '==', this.fav.id)
               .orderBy('instant', 'desc')
               .limit(3)

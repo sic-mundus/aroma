@@ -8,7 +8,7 @@
                 <div v-if="type === 'sign-in'" class="absolute-bottom-right q-pr-md" style="transform: translateY(50%); z-index:100">
                     <q-btn @click="type = 'sign-up'" fab class="shadow-4" icon="mdi-account-plus" color="accent">
                         <q-tooltip content-class="bg-accent" content-style="font-size: 16px">
-                            Registra un nuovo account
+                            Create a new account
                         </q-tooltip>
                     </q-btn>
                 </div>
@@ -18,7 +18,7 @@
 
                 <q-form ref="form" class="q-px-sm q-pt-xl" @submit="letsParty">
 
-                        <p class="text-center text-body2" v-if="type === 'forgot-password'">Inserisci la tua e-mail. Ti invieremo un link per reimpostare la password</p>
+                    <p class="text-center text-body2" v-if="type === 'forgot-password'">Inserisci la tua e-mail. Ti invieremo un link per reimpostare la password</p>
 
                     <q-input square bottom-slots :rules="rules.email" v-model="form.email" type="email" label="Email" autocomplete="email">
                         <template v-slot:before>
@@ -26,17 +26,23 @@
                         </template>
                     </q-input>
 
-                        <q-input v-if="type === 'sign-up'" square bottom-slots :rules="rules.username" v-model="form.username" type="text" label="Username">
-                            <template v-slot:before>
-                                <q-icon name="mdi-account" />
-                            </template>
-                        </q-input>
+                    <q-input v-if="type === 'sign-up'" square bottom-slots :rules="rules.username" v-model="form.username" type="text" label="Username">
+                        <template v-slot:before>
+                            <q-icon name="mdi-account" />
+                        </template>
+                    </q-input>
 
-                        <q-input v-if="type === 'sign-in' || type === 'sign-up'" square bottom-slots :rules="rules.password" v-model="form.password" type="password" label="Password" autocomplete="new-password">
-                            <template v-slot:before>
-                                <q-icon name="lock" />
-                            </template>
-                        </q-input>
+                    <q-input v-if="type === 'sign-in' || type === 'sign-up'" square bottom-slots :rules="rules.password" v-model="form.password" type="password" label="Password" autocomplete="new-password">
+                        <template v-slot:before>
+                            <q-icon name="lock" />
+                        </template>
+                    </q-input>
+
+                    <q-input v-if="type === 'sign-up'" square bottom-slots :rules="rules.password" v-model="form.repeatPassword" type="password" label="Repeat password" autocomplete="new-password">
+                        <template v-slot:before>
+                            <q-icon name="lock" />
+                        </template>
+                    </q-input>
 
                     <!--Button-->
                     <q-card-actions class="q-px-lg q-mt-md">
@@ -66,8 +72,7 @@
 
 <script>
 export default {
-    components: {
-    },
+    components: {},
     data() {
         return {
             type: 'sign-in',
@@ -75,7 +80,8 @@ export default {
             form: {
                 email: '',
                 username: '',
-                password: ''
+                password: '',
+                repeatPassword: ''
             },
             rules: {
                 email: [
@@ -85,7 +91,7 @@ export default {
                 username: [
                     v => !!v || 'Username is required',
                     v =>
-                    v.length >= 6 ||
+                    v.length >= 4 ||
                     'Username must be greater than 6 characters'
                 ],
                 password: [
@@ -100,11 +106,11 @@ export default {
     computed: {
         btnMessage() {
             if (this.type === 'sign-in') {
-                return 'Accedi'
+                return 'Sign In'
             } else if (this.type === 'sign-up') {
-                return 'Registrati'
+                return 'Join'
             } else if (this.type === 'forgot-password') {
-                return 'Invia'
+                return 'Send'
             }
             return ''
         }
@@ -134,30 +140,11 @@ export default {
                 let password = this.form.password;
 
                 this.$signIn(email, password)
-                .then(user => {
-                        this.busy = false
-                })
-                .catch(error => {
-                    this.$q.notify({
-                        color: 'negative',
-                        icon: 'announcement',
-                        message: error.message
-                    })
-                    console.error(`Not signed in: ${error.message}`)
-                    this.busy = false
-                })
-            }
-        },
-        signUp() {
-            if (this.$refs.form.validate()) {
-                this.busy = true
-                let email = this.form.email;
-                let password = this.form.password;
-                let username = this.form.username;
-
-                this.$signUp(email, password, username)
                     .then(user => {
                         this.busy = false
+
+                        // Redirect to homepage
+                        //this.$router.replace({ name: 'home' }).catch(() => {});
                     })
                     .catch(error => {
                         this.$q.notify({
@@ -166,9 +153,59 @@ export default {
                             message: error.message
                         })
                         console.error(`Not signed in: ${error.message}`)
-
                         this.busy = false
                     })
+            }
+        },
+        signUp() {
+            if (this.$refs.form.validate()) {
+
+                if (this.form.password != this.form.repeatPassword) {
+                    this.$q.notify({
+                        color: 'negative',
+                        icon: 'announcement',
+                        message: 'Passwords don\'t match'
+                    })
+                    return;
+                }
+
+                this.busy = true
+
+                let email = this.form.email;
+                let password = this.form.password;
+                let username = this.form.username;
+
+                // Create user in firestore
+                this.$signUp(email, password, username).then((user) => {
+
+                    // Creating dude in firestore
+                    this.createDude(user).then((dude) => {
+
+                        this.busy = false
+
+                        // Committing to the store
+                        this.$store.commit('auth/SET_ME', dude)
+
+                        // Ok, time to go to homepage
+                        // NB: This will be redirected to 'anagraphic'
+                        // by the route guardiam
+                        this.$router.replace({ name: 'home' }).catch(() => {});
+
+                    }).catch((error) => {
+                        throw error;
+                    })
+                    
+                })
+                .catch(error => {
+                    this.$q.notify({
+                        color: 'negative',
+                        icon: 'announcement',
+                        message: error.message
+                    })
+                    console.error(`Not signed in: ${error.message}`)
+
+                    this.busy = false
+                })
             }
         },
         recovery() {
@@ -197,6 +234,33 @@ export default {
                         this.busy = false
                     })
             }
+        },
+
+        createDude(user) {
+            console.log('creating dude for the user uid', user.uid)
+            return new Promise((resolve, reject) => {
+
+                let dude = {
+                    userId: user.uid,
+                    photoUrl: '',
+                    displayName: user.displayName,
+                    buddyIds: [],
+                    email: user.email,
+                    lang: 'en-US',
+                    hasSettings: false, // so that the next route will be 'anagraphic'
+                }
+
+                this.$db
+                    .collection('dudes')
+                    .doc(user.uid)
+                    .set(dude)
+                    .then(() => {
+                        console.log('dude added!')
+                        resolve(dude)
+                    })
+                    .catch((error) => reject(error))
+
+            })
         }
     }
 }

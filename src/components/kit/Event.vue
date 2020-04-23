@@ -38,8 +38,7 @@
             <dude v-for="(dude, idx) in dudes" 
             :key="idx" 
             :dude="dude" 
-            :event="event"
-            @request-add-buddy="add2Buddies"></dude>
+            :event="event"></dude>
         </q-card>
     </div>
 
@@ -172,27 +171,6 @@ export default {
                     })
             })
         },
-
-        add2Buddies(dude) {
-
-            let myBuddies = [...this.me.buddyIds];
-            myBuddies.push(dude.userId);
-
-            this.$db
-                .collection('dudes')
-                .doc(this.me.userId)
-                .set({
-                    buddyIds: myBuddies
-                }, { merge: true })
-                .then(() => {
-
-                    // Commit to store
-                    let me = this.me;
-                    me.buddyIds = myBuddies;
-                    this.$store.commit('auth/SET_ME', me)
-                })
-
-        }
     }
 }
 </script>

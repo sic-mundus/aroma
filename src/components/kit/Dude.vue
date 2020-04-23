@@ -7,16 +7,24 @@
 
         <q-item-section>
 
-            <!--First Line-->
+            <!--1st Line-->
             <q-item-label>@{{ dude.displayName }}</q-item-label>
 
             <!--2nd line-->
             <q-item-label v-if="pickedSameColor" caption>Picked your exact same color</q-item-label>
             <q-item-label v-else caption>Picked {{ hisColor.name }}</q-item-label>
+            <q-item-label>Buddy? {{ isMyBuddy }}</q-item-label>
         </q-item-section>
 
         <q-item-section avatar>
-          <q-btn flat round :icon="'mdi-account-plus'" :size="'md'" color="primary" @click="add">
+          <q-btn 
+          v-if="!isMyBuddy"
+          flat 
+          round 
+          :icon="'mdi-account-plus'" 
+          :size="'md'" 
+          color="primary"
+          @click="add">
               <q-tooltip :content-style="{'font-size': '16px'}">
                 Add to your buddies
             </q-tooltip>
@@ -49,6 +57,7 @@ export default {
     },
     computed: {
         ...mapGetters({
+            me: 'auth/me',
             getColorById: 'data/getColorById'
         }),
 
@@ -63,12 +72,35 @@ export default {
 
         pickedSameColor() {
             return this.dude.colId ==this.event.colId
+        },
+
+        isMyBuddy() {
+            let myBuddies = this.me.buddyIds;
+            return myBuddies.some(x => x == this.dude.userId)
         }
     },
     methods: {
 
         add() {
-            this.$emit('request-add-buddy', this.dude)
+            
+            let myBuddies = [...this.me.buddyIds];
+            myBuddies.push(this.dude.userId);
+
+            this.$db
+                .collection('dudes')
+                .doc(this.me.userId)
+                .set({
+                    buddyIds: myBuddies
+                }, { merge: true })
+                .then(() => {
+
+                    console.log('Buddy added to your array in firestore. time to commit to vuex');
+
+                    // Commit to store
+                    let me = {...this.me};
+                    me.buddyIds = myBuddies;
+                    this.$store.commit('auth/SET_ME', me)
+                })
         },
     },
     mounted() {

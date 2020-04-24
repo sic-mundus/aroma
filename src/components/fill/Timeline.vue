@@ -13,8 +13,7 @@
 
         <div class="column justify-center items-center">
 
-             <img :src="'/statics/undraw_palette.svg'"
-             style="max-height: 30vh"/>
+            <img :src="'/statics/undraw_palette.svg'" style="max-height: 30vh" />
 
             <div class="text-h3 text-center text-primary text-bold q-mt-xl">Heya stranger, welcome.</div>
             <div class="text-h5 text-center text-primary q-mt-sm">This is where your story will take place.</div>
@@ -27,10 +26,7 @@
         </div>
     </div>
 
-    <q-infinite-scroll v-else @load="onLoad" 
-    :offset="50" 
-    class="q-pa-xl"
-    ref="infinite_scroll">
+    <q-infinite-scroll v-else @load="onLoad" :offset="50" class="q-pa-xl" ref="infinite_scroll">
 
         <!--Timeline-->
         <q-timeline color="secondary" :layout="layout">
@@ -83,6 +79,7 @@
             </div>
         </template>
     </q-infinite-scroll>
+
 </div>
 </template>
 
@@ -95,7 +92,7 @@ import TimeGroup from '../kit/TimeGroup'
 export default {
     components: {
         Event,
-        TimeGroup
+        TimeGroup,
     },
     data() {
         return {
@@ -104,7 +101,12 @@ export default {
             events: [],
 
             welcome: false,
-            skeleton: true
+            skeleton: true,
+
+            dialog: {
+                show: false,
+                dude: {}
+            }
         }
     },
     computed: {
@@ -132,6 +134,11 @@ export default {
             this.welcome = val;
             this.skeleton = false;
         })
+
+        // this.$root.$on('request-show-dude-info', (dude) => {
+        //     this.dialog.show = true;
+        //     this.dialog.dude = dude
+        // })
 
     },
     methods: {

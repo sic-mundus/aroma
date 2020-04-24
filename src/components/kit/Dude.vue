@@ -2,7 +2,9 @@
 <div>
     <q-item>
         <q-item-section avatar>
-            <q-img :ratio="1" :img-style="{'border-radius': '50%'}" spinner-color="primary" :src="avatarSrc"/>
+            <q-img :ratio="1" :img-style="{'border-radius': '50%'}" spinner-color="primary" :src="avatarSrc"
+                style="cursor: pointer"
+               @click="$root.$emit('request-show-dude-info', dude)" />
         </q-item-section>
 
         <q-item-section>

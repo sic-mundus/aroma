@@ -5281,8 +5281,16 @@ export default {
 
         // Compare it with the distance
         // among the two ends of the scale
-        let first = state.hues[0];
-        let last = state.hues[state.hues.length - 1]
+        let first = {
+          r: 255,
+          g: 255,
+          b: 255
+        };
+        let last = {
+          r: 0,
+          g: 0,
+          b: 0
+        }
 
         let scale = Math.abs(first.r - last.r) +
           Math.abs(first.g - last.g) +

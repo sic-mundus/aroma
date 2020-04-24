@@ -73,6 +73,7 @@ export default {
         ...mapGetters({
             getColorById: 'data/getColorById',
             getCatsByIds: 'data/getCatsByIds',
+            getAffinity: 'data/getAffinity',
             me: 'auth/me'
         }),
 
@@ -100,16 +101,16 @@ export default {
     methods: {
         getDudesOfEvent() {
 
-            const REQUESTED_AFFINITY = 5;
+            const REQUESTED_AFFINITY = 100;
 
             // Retrieve all events of this day
             // of dudes that picked the same color as yours (or a close one)
             this.$db
                 .collection('events')
-                .where('colId', '>=', this.event.colId - REQUESTED_AFFINITY)
-                .where('colId', '<=', this.event.colId + REQUESTED_AFFINITY)
+                //.where('colId', '>=', this.event.colId - REQUESTED_AFFINITY)
+                //.where('colId', '<=', this.event.colId + REQUESTED_AFFINITY)
                 .where('day', '==', this.event.day)
-                .limit(4) // Note: one will always be you
+                //.limit(4) // Note: one will always be you
                 .get()
                 .then((docs) => {
 
@@ -121,19 +122,25 @@ export default {
                         // NB: This check has to be done client-side
                         // b/c Firestore doesn't support inequality comparison
                         if (event.userId !== this.me.userId) {
+
+                            let hisColor = this.getColorById(event.colId);
+                            let affinity = this.getAffinity(hisColor, this.color);
+
+                            if (affinity > 0.85 && this.dudes.length < 10) {
                             
-                            // Retrieve user of this event
-                            this.getDudeById(event.userId).then((dude) => {
-                                    
-                                    // Extend with the color id he choosed
-                                    dude['colId'] = event.colId;
+                                // Retrieve user of this event
+                                this.getDudeById(event.userId).then((dude) => {
+                                        
+                                        // Extend with the color id he choosed
+                                        dude['colId'] = event.colId;
 
-                                    this.dudes.push(dude);
+                                        this.dudes.push(dude);
 
-                                })
-                                .catch((error) => {
-                                    console.error('Dude with id' + event.userId + ' not found in firestore')
-                                })
+                                    })
+                                    .catch((error) => {
+                                        console.error('Dude with id' + event.userId + ' not found in firestore')
+                                    })
+                            }
 
                         } else {
                             // It's me, mario

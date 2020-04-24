@@ -64,7 +64,7 @@
                 <div>
                     <div class="text-body2">Feeling like exploring some more?</div>
                     <div class="text-body2">No problem, just pick another color</div>
-                    <q-btn color="primary" class="q-mt-md" @click="explore">PICK</q-btn>
+                    <q-btn color="primary" class="q-mt-md" @click="explore">Let's go</q-btn>
                 </div>
             </q-timeline-entry>
 

@@ -113,21 +113,27 @@ export default {
                 //.limit(4) // Note: one will always be you
                 .get()
                 .then((docs) => {
-
+                    let dudesAlreadyProcesseed = []
                     docs.forEach((doc) => {
                         const event = doc.data();
-
+                        
+                        if (dudesAlreadyProcesseed.some(x => x === event.userId)) {
+                            // Already added this dude for another color similarity
+                            console.log('Already processed this dude');
+                        }
                         // Check if the event belongs to me
                         // or to someone else
                         // NB: This check has to be done client-side
                         // b/c Firestore doesn't support inequality comparison
-                        if (event.userId !== this.me.userId) {
+                        else if (event.userId !== this.me.userId) {
 
                             let hisColor = this.getColorById(event.colId);
                             let affinity = this.getAffinity(hisColor, this.color);
 
-                            if (affinity > 0.85 && this.dudes.length < 10) {
-                            
+                            if (affinity > 0.8 && this.dudes.length < 10) {
+                                   
+                                dudesAlreadyProcesseed.push(event.userId);
+
                                 // Retrieve user of this event
                                 this.getDudeById(event.userId).then((dude) => {
                                         

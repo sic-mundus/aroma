@@ -48,7 +48,7 @@
           color="primary"
           @click="hi">
               <q-tooltip :content-style="{'font-size': '16px'}">
-                Wave at {{ dude.displayName }}
+                Wave at @{{ dude.displayName }}
             </q-tooltip>
           </q-btn>
         </q-item-section>

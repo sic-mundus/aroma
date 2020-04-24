@@ -242,7 +242,7 @@ export default {
 
                 let dude = {
                     userId: user.uid,
-                    photoUrl: '',
+                    picUrl: '',
                     displayName: user.displayName,
                     buddyIds: [],
                     email: user.email,

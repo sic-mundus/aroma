@@ -2,8 +2,10 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-A social network that connects people who develop similar color trends
+A social network that connects people who develop similar color trends.  
 The funcionalities of this project are covered in this [Medium Article](https://)
+
+Currently looking for contributoins to enhance some of the features
 
 
 ### Built With
@@ -30,7 +32,7 @@ $ yarn global add @quasar/cli
 
 ### Installation
  
-1. Clone the aroma
+1. Clone the repo
 ```sh
 git clone https://github.com/sic-mundus/aroma.git
 ```

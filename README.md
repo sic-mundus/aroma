@@ -40,12 +40,13 @@ git clone https://github.com/sic-mundus/aroma.git
 ```sh
 yarn
 ```
-3. Create a project in the [Google Firebase console](https://console.firebase.google.com/) and enable the email authentication.
+3. Create a project in the [Google Firebase console](https://console.firebase.google.com/) and enable the email authentication.  
 It's also important to enable the Firestore and the Storage funcionalities, by selecting a location.
 4. Add a Web App and follow the steps to get your configuration file
-5. Add the quasar app extension dotenv. Make sure to follow all the steps described in the [quasar doc](https://quasar.dev/app-extensions/introduction).
+5. Add the quasar app extension dotenv.  
+Make sure to follow all the steps described in the [quasar doc](https://quasar.dev/app-extensions/introduction).  
 The extension instructions are covered [here](https://github.com/quasarframework/app-extension-dotenv)
-This extension allows you to have different parameters for different environments.
+This extension allows you to have different parameters for different environments.  
 What you want to achieve is to have a .env.dev file in your root folder, that looks like this
 ```sh
 apiKey=XXX

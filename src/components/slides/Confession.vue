@@ -4,7 +4,7 @@
         <!--Info-->
         <div class="col-auto items-center">
             <div class="text-h6 text-center">Do you want to spend a few words about it?</div>
-            <div class="text-subtitle text-center">This is totally optional, it will be shown to anyone who achieve a 100% affinity</div>
+            <div class="text-subtitle text-center">This is totally optional, it will be shown to anyone who achieves a 100% affinity</div>
         </div>
 
         <!--Confession-->

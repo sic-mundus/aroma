@@ -3,7 +3,7 @@
 ## About The Project
 
 A social network that connects people who develop similar color trends.  
-The funcionalities of this project are covered in this [Medium Article](https://)
+The funcionalities of this project are covered in this [Medium Article](https://medium.com/@mrlouboltz/aroma-25e00a5d048c?source=friends_link&sk=e8ea28b4c4f5d532bed4500ee67e88de)
 
 Currently looking for contributoins to enhance some of the features
 

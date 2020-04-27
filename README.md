@@ -45,7 +45,7 @@ It's also important to enable the Firestore and the Storage funcionalities, by s
 4. Add a Web App and follow the steps to get your configuration file
 5. Add the quasar app extension dotenv.  
 Make sure to follow all the steps described in the [quasar doc](https://quasar.dev/app-extensions/introduction).  
-The extension instructions are covered [here](https://github.com/quasarframework/app-extension-dotenv)
+The extension instructions are covered [here](https://github.com/quasarframework/app-extension-dotenv).  
 This extension allows you to have different parameters for different environments.  
 What you want to achieve is to have a .env.dev file in your root folder, that looks like this
 ```sh
